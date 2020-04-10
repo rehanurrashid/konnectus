@@ -18,6 +18,7 @@ class PlaceController extends Controller
             'phone' => 'required', 
             'longitude' => 'required',
             'latitude' => 'required',
+            'image' => 'required',
         ]);
         if ($validator->fails()) { 
                 return response()->json(['error'=>$validator->errors()], 401);            
@@ -49,6 +50,12 @@ class PlaceController extends Controller
     public function show($id){
 
         $place = Place::where('id',$id)->get();
+        return response()->json(['success'=>$place], 200); 
+    }
+
+    public function show_all(){
+
+        $place = Place::get();
         return response()->json(['success'=>$place], 200); 
     }
 

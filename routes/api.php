@@ -24,6 +24,8 @@ Route::post('/upload', 'API\FileController@upload');
 
 Route::post('/product/{keyword?}{slug?}', 'API\ProductController@show');
 
+Route::get('/places', 'API\PlaceController@show_all');
+
 Route::group(['middleware' => 'auth:api'], function(){
 
 	Route::post('/logout', 'API\UserController@logout');

@@ -106,7 +106,6 @@ public $successStatus = 200;
             'name' => 'required', 
             'phone' => 'required|unique:user_profiles,phone,'.auth()->user()->id.',user_id',
             'gender' => 'required',
-            'image' => 'required',
             'address' => 'required',
             'longitude' => 'required',
             'latitude' => 'required',

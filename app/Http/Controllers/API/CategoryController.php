@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $category = Category::pluck('name', 'id');
+        $category = Category::get();
         return response()->json(['Categories'=>$category], 200);
     }
 
