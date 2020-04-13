@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller; 
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Http\Request; 
@@ -115,6 +116,17 @@ public $successStatus = 200;
                     return response()->json(['error'=>$validator->errors()], 401);            
         }
 
+        $filename ='';
+
+        if ($request['image']){
+            $originalImage= $request->file('image');
+            $request['picture'] = $request->file('image')->store('public/storage');
+            $request['picture'] = Storage::url($request['picture']);
+            $request['picture'] = asset($request['picture']);
+            $filename = $request->file('image')->hashName();
+
+        }
+
         $user = DB::table('users')
               ->where('id', auth()->user()->id)
               ->update(['name' => $request->name]);
@@ -124,7 +136,7 @@ public $successStatus = 200;
               ->update([
                 'phone' => $request->phone, 
                 'gender' => $request->gender,
-                'photo' => $request->image,
+                'photo' => $filename,
                 'address' => $request->address,
                 'longitude' => $request->longitude,
                 'latitude' => $request->latitude, 
@@ -172,13 +184,12 @@ public $successStatus = 200;
         return response()->json(['user' => $user], $this-> successStatus); 
     } 
 
+    public function places(Request $request){
 
-    public function total_places(Request $request){
-
-        $total_places = User::with('total_places')->where('id', auth()->user()->id )->get();
+        $total_places = User::with('total_places')->withCount(['total_places','approved_places','disapproved_places'])->where('id', auth()->user()->id )->first();
 
         if($total_places){
-            return response(['message' => $total_places], 200);
+            return response($total_places, 200);
         }
         else{
             return response(['message' => 'No Places Found!'], 200);
@@ -186,28 +197,15 @@ public $successStatus = 200;
 
     }
 
-    public function disapproved_places(Request $request){
+    public function services(Request $request){
 
-        $disapproved_places = User::with('disapproved_places')->where('id', auth()->user()->id )->get();
+        $total_services = User::with('total_services')->withCount(['total_services','approved_services','disapproved_services'])->where('id', auth()->user()->id )->first();
 
-        if($disapproved_places){
-            return response(['message' => $disapproved_places], 200);
+        if($total_services){
+            return response($total_services, 200);
         }
         else{
-            return response(['message' => 'No Places Found!'], 200);
-        }
-
-    }
-
-    public function approved_places(Request $request){
-
-        $approved_places = User::with('approved_places')->where('id', auth()->user()->id )->get();
-
-        if($approved_places){
-            return response(['message' => $approved_places], 200);
-        }
-        else{
-            return response(['message' => 'No Places Found!'], 200);
+            return response(['message' => 'No Services Found!'], 200);
         }
 
     }

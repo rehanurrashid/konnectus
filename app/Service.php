@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use App\ProductRating;
+use App\ServiceRating;
 use App\User; 
+use App\Category;
 
-class Product extends Model
+class Service extends Model
 {
 	use SoftDeletes;
 
@@ -16,6 +17,10 @@ class Product extends Model
 
 	public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 
     public function setSlugAttribute($slug)
@@ -40,6 +45,6 @@ class Product extends Model
 
     public function rating()
     {
-        return $this->hasMany(ProductRating::class, 'product_id','id');
+        return $this->hasMany(ServiceRating::class, 'service_id','id');
     }
 }

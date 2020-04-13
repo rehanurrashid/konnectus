@@ -95,6 +95,8 @@
                                                 <th>ID</th>
                                                 <th>Parent ID</th>
                                                 <th>Category</th>
+                                                <th>Image</th>
+                                                <th>Type</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
@@ -113,6 +115,8 @@
                                                         { data: 'id', name: 'id' },
                                                         { data: 'parent_id', name: 'parent_id' },
                                                         { data: 'name', name: 'name' },
+                                                        { data: 'image', name: 'image' },
+                                                        { data: 'type', name: 'type' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],
                                                     buttons: {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
@@ -24,6 +25,17 @@ class PlaceController extends Controller
                 return response()->json(['error'=>$validator->errors()], 401);            
         }
 
+        $filename ='';
+
+        if ($request['image']){
+            $originalImage= $request->file('image');
+            $request['picture'] = $request->file('image')->store('public/storage');
+            $request['picture'] = Storage::url($request['picture']);
+            $request['picture'] = asset($request['picture']);
+            $filename = $request->file('image')->hashName();
+
+        }
+
         $place = new Place;
 
         $place->user_id = auth()->user()->id;
@@ -31,7 +43,7 @@ class PlaceController extends Controller
         $place->name = $request->name;
         $place->setAttribute('slug', $request->name);
         $place->address = $request->address;
-        $place->image = $request->image;
+        $place->image = $filename;
         $place->phone = $request->phone;
         $place->longitude = $request->longitude;
         $place->latitude = $request->latitude;
@@ -49,14 +61,26 @@ class PlaceController extends Controller
 
     public function show($id){
 
-        $place = Place::where('id',$id)->get();
+        $place = Place::with(['category'])->withCount(['rating'])->where('id',$id)->first();
+        $rate = $place->rating()->avg('rate');
+        $rate = number_format((float)$rate, 1, '.', '');
+        $place->avg_rate = $rate;
         return response()->json(['success'=>$place], 200); 
     }
 
     public function show_all(){
 
-        $place = Place::get();
-        return response()->json(['success'=>$place], 200); 
+        $places = Place::with(['category'])->withCount(['rating'])->get();
+
+        foreach ($places as $place) {
+
+            $rate = $place->rating()->avg('rate');
+            $rate = number_format((float)$rate, 1, '.', '');
+            $place->avg_rate = $rate;
+
+        }
+
+        return response()->json(['success'=>$places], 200); 
     }
 
     public function store_rating(Request $request){
@@ -97,8 +121,5 @@ class PlaceController extends Controller
         }
     }
 
-    public function show(Request $request){
-
-    }
 }
 

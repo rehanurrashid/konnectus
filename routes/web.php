@@ -31,8 +31,10 @@ Route::prefix('admin')->middleware(['auth:web','can:isAdmin'])->group(function (
   	Route::get('acount-settings/{id}/edit','AdminController@edit')->name('admin.account.edit');
   	Route::put('acount-settings/{id}','AdminController@update')->name('admin.account.update');
 
+
   	Route::resource('users', 'UserController');
   	Route::resource('categories','CategoryController');
-  	Route::resource('products','ProductController');
+  	Route::post('dependent/category','CategoryController@fetch')->name('dynamicdependent.fetch');
+  	Route::resource('services','ServiceController');
   	Route::resource('places','PlaceController');
 });

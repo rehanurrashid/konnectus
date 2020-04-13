@@ -20,7 +20,7 @@ class CategoryController extends Controller
     {
         if($request->ajax()){
 
-            $category = Category::select(['id','parent_id', 'name','created_at', 'updated_at']);
+            $category = Category::select(['id','parent_id', 'name','image','type','created_at', 'updated_at']);
             // dd($category);
             return Datatables::of($category)
                 ->addColumn('action', function($category) {
@@ -39,8 +39,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $category = Category::where('parent_id','=',null)->pluck('name', 'id');
-        return view('admin.category.create',compact('category'));
+        return view('admin.category.create');
     }
 
     /**
@@ -51,9 +50,22 @@ class CategoryController extends Controller
      */
     public function store(StoreCategory $request)
     {
+        $filename ='';
+
+        if ($request['photo']){
+            $originalImage= $request->file('photo');
+            $request['picture'] = $request->file('photo')->store('public/storage');
+            $request['picture'] = Storage::url($request['picture']);
+            $request['picture'] = asset($request['picture']);
+            $filename = $request->file('photo')->hashName();
+
+        }
+
         $category = new Category;
         $category->parent_id = $request->parent_id;
         $category->name = $request->name;
+        $category->type = $request->type;
+        $category->image = $request['picture'];
         $category->save();
 
         if($category){
@@ -98,8 +110,24 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
 
+        $filename ='';
+
+        if ($request['photo']){
+            $originalImage= $request->file('photo');
+            $request['picture'] = $request->file('photo')->store('public/storage');
+            $request['picture'] = Storage::url($request['picture']);
+            $request['picture'] = asset($request['picture']);
+            $filename = $request->file('photo')->hashName();
+
+        }
+        else{
+            $filename =$category->image;
+        }
+
         $category->parent_id = $request->parent_id;
         $category->name = $request->name;
+        $category->type = $request->type;
+        $category->image = $request['picture'];
         $category->save();
 
         if($category){
@@ -121,5 +149,16 @@ class CategoryController extends Controller
         if($category){
             return view('admin.category.index');
         }
+    }
+
+    public function fetch(Request $request){
+        $categories = Category::where('type', '=' ,$request->value)->where('parent_id','=',null)->get();
+        $output = '<option value="" selected>Select Parent Category</option>';
+
+        foreach ($categories as $category) {
+            $output .= '<option value="'.$category->id.'">'.$category->name.'</option>';
+        }
+
+        return $output;
     }
 }

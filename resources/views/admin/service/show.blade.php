@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Add Debate')
+@section('title', 'Service Details')
 
 @push('before-styles')
     <link href="{{ asset('admin/css/layout.min.css') }}" rel="stylesheet" type="text/css">
@@ -24,7 +24,7 @@
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>
     <script src="{{ asset('admin/js/demo_pages/dashboard.js') }}"></script>
-    <link href="{{ asset('admin/css/myvalidate.css') }}" rel="stylesheet" type="text/css">
+
 @endpush
 
 @section('content')
@@ -59,7 +59,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-header header-elements-inline">
-                                            <h6 class="card-title">{{(isset($debate)) ? 'Update' : 'Add'}} Debate </h6>
+                                            <h6 class="card-title">Service Details</h6>
                                             <div class="header-elements">
                                                 <div class="list-icons">
                                                     <a class="list-icons-item" data-action="collapse"></a>
@@ -67,57 +67,85 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            @if(isset($debate))
-                                                {{ Form::model($debate,['method'=>'put','route' => ['debates.update',$debate->id],'enctype' => 'multipart/form-data' ]) }}
-                                            @else
-                                                {{ Form::open(['route' => 'debates.store' ,'enctype' => 'multipart/form-data'] ) }}
-                                            @endif
                                             <div class="row">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('user_id','Select User') }}<span style="color:red;">*</span>
-                                                        {{ Form::select('user_id', $user ,null, ['class' => 'form-control select2', 'style'=> 'margin-bottom:20px;']) }}
-
-                                                        {!! $errors->first('user_id', '<label id="user-id-error" class="error" for="user_id">:message</label>') !!}
-                                                    </div>
+                                                <div class="col-md-3">
+                                                	<h4 class="float-right">User Name: </h4>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('photo',' Image') }}<span style="color:red;">*</span>
-                                                        {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
-                                                        {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
-                                                        <p id="error1" style="display:none; color:#FF0000;">
-                                                        Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
-                                                        </p>
-                                                        <p id="error2" style="display:none; color:#FF0000;">
-                                                        Maximum File Size Limit is 5MB.
-                                                        </p>
-                                                    </div>
+                                                	<h4>{{$service->user->name}}</h4>
                                                 </div>
                                             </div>
+                                            <hr>
+											<div class="row">
+                                                <div class="col-md-3">
+                                                	<h4 class="float-right">Category: </h4>
+                                                </div>
+                                                <div class="col">
+                                                	<h4>{{$service->category->name}}</h4>
+                                                </div>
+                                            </div>
+                                            <hr>
                                             <div class="row">
+                                                <div class="col-md-3">
+                                                	<h4 class="float-right">Service Name </h4>
+                                                </div>
                                                 <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('topic','Topic') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('topic',old('topic'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Topic')) }}
-                                                        {!! $errors->first('topic', '<label id="topic-error" class="error" for="topic">:message</label>') !!}
-                                                    </div>
+                                                	<h4>{{$service->name}}</h4>
                                                 </div>
                                             </div>
+                                            <hr>
                                             <div class="row">
+                                                <div class="col-md-3">
+                                                	<h4 class="float-right">Address: </h4>
+                                                </div>
                                                 <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('description','Debate Description') }}<span style="color:red;">*</span>
-                                                        {{ Form::textarea('description',old('description'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Debate Description')) }}
-                                                        {!! $errors->first('description', '<label id="description-error" class="error" for="description">:message</label>') !!}
-                                                    </div>
+                                                	<h4>{{$service->address}}</h4>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-end align-items-center">
-                                                <button type="submit" name="submit" class="btn bg-blue ml-3">{{(isset($faq)) ? 'Update' : 'Save'}} </button>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                	<h4 class="float-right">Phone: </h4>
+                                                </div>
+                                                <div class="col">
+                                                	<h4>{{$service->phone}}</h4>
+                                                </div>
                                             </div>
-
-                                            {{ Form::close() }}
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                	<h4 class="float-right">Status </h4>
+                                                </div>
+                                                <div class="col">
+                                                	<h4>
+                                                		{{($service->status == 0) ? 'Disapproved' : 'Approved'}}
+                                                		&nbsp; &nbsp; &nbsp;
+                                                		<a href="{{ route('services.edit', [$service->id]) }}" title="Change Status"><i class="icon-pencil5 mr-1 icon-1x"></i></a>
+                                                	</h4>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                	<h4 class="float-right">Tags: </h4>
+                                                </div>
+                                                <div class="col">
+                                                	<h4>{{ (!empty($service->tags)) ? $service->tags : 'No Tags'}}</h4>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                	<h4 class="float-right">Image: </h4>
+                                                </div>
+                                                <div class="col">
+                                                	@if(!empty($service->image))
+													<img src="{{ asset('storage/storage/'.$service->image) }}" alt="Service Image" width="30%">
+													@else
+													<h4>No Image</h4>
+                                                	@endif
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,11 +169,5 @@
         <!-- /main content -->
 
     </div>
-<script type="text/javascript" src="{{ asset('admin/js/jquery.validate.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('admin/js/imageValidate.js') }}"></script>
-<script type="text/javascript" src="{{ asset('admin/js/myvalidate.js') }}"></script>
-<script>
-        // searchable dropdown
-    $('.select2').select2();
-</script>
+
 @endsection

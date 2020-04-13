@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Add Comment')
+@section('title', 'Update Service')
 
 @push('before-styles')
     <link href="{{ asset('admin/css/layout.min.css') }}" rel="stylesheet" type="text/css">
@@ -24,7 +24,7 @@
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>
     <script src="{{ asset('admin/js/demo_pages/dashboard.js') }}"></script>
-    <link href="{{ asset('admin/css/myvalidate.css') }}" rel="stylesheet" type="text/css">
+    
 @endpush
 
 @section('content')
@@ -59,7 +59,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-header header-elements-inline">
-                                            <h6 class="card-title">{{(isset($content_type)) ? 'Update' : 'Add'}} Comment </h6>
+                                            <h6 class="card-title">{{(isset($service)) ? 'Update' : 'Add'}} Service </h6>
                                             <div class="header-elements">
                                                 <div class="list-icons">
                                                     <a class="list-icons-item" data-action="collapse"></a>
@@ -67,40 +67,23 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            @if(isset($comment))
-                                                {{ Form::model($comment,['method'=>'put','route' => ['comments.update',$comment->id]]) }}
+                                            @if(isset($service))
+                                                {{ Form::model($service,['method'=>'put','route' => ['services.update',$service->id],'enctype' => 'multipart/form-data' , 'class' => 'js-form']) }}
                                             @else
-                                                {{ Form::open(['route' => 'comments.store']) }}
+                                                {{ Form::open(['route' => 'services.store' ,'enctype' => 'multipart/form-data' , 'class' => 'js-form'] ) }}
                                             @endif
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('user_id','Select User') }}<span style="color:red;">*</span>
-                                                        {{ Form::select('user_id', $user ,null, ['class' => 'form-control select2', 'style'=> 'margin-bottom:20px;']) }}
+                                                        {{ Form::label('status','Change Request Status') }}<span style="color:red;">*</span>
+                                                        {{ Form::select('status', ['1' => 'Approved', '0' => 'Disapproved'] ,'1' , ['class' => 'form-control select2', 'style'=> 'margin-bottom:10px;']) }}
 
-                                                        {!! $errors->first('user_id', '<label id="user-id-error" class="error" for="user_id">:message</label>') !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('debate_id','Select Debate') }}<span style="color:red;">*</span>
-                                                        {{ Form::select('debate_id', $debate ,null, ['class' => 'form-control select2', 'style'=> 'margin-bottom:20px;']) }}
-
-                                                        {!! $errors->first('debate_id', '<label id="debate-id-error" class="error" for="debate">:message</label>') !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('comment','Comment') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('comment',old('comment'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Comment')) }}
-                                                        {!! $errors->first('comment', '<label id="comment-error" class="error" for="comment">:message</label>') !!}
+                                                        {!! $errors->first('status', '<label id="status-error" class="error" for="status">:message</label>') !!}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-end align-items-center">
-                                                <button type="submit" name="submit" class="btn bg-blue ml-3">{{(isset($faq)) ? 'Update' : 'Save'}} </button>
+                                                <button type="submit" class="btn bg-blue ml-3">{{(isset($service)) ? 'Update' : 'Save'}} </button>
                                             </div>
 
                                             {{ Form::close() }}
@@ -110,21 +93,22 @@
                             </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
                 <!-- /dashboard content -->
             </div>
             <!-- /content area -->
+
+
             <!-- Footer -->
             @include('admin.includes.footer')
             <!-- /footer -->
+
         </div>
         <!-- /main content -->
+
     </div>
-<script type="text/javascript" src="{{ asset('admin/js/jquery.validate.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('admin/js/myvalidate.js') }}"></script>
-<script>
-        // searchable dropdown
-    $('.select2').select2();
-</script>
+
 @endsection

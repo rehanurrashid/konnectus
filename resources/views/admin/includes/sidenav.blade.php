@@ -20,10 +20,10 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('products.index') }}" class="nav-link {{Request::is(['products','products/*']) ? 'active' : ''}}">
+            <a href="{{ route('services.index') }}" class="nav-link {{Request::is(['services','services/*']) ? 'active' : ''}}">
                 <i class="icon-user"></i>
                 <span>
-                    Products Management
+                    Services Management
                 </span>
             </a>
         </li>

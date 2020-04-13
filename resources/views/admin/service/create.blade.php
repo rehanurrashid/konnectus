@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Add Product')
+@section('title', 'Add Place')
 
 @push('before-styles')
     <link href="{{ asset('admin/css/layout.min.css') }}" rel="stylesheet" type="text/css">
@@ -69,7 +69,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-header header-elements-inline">
-                                            <h6 class="card-title">{{(isset($product)) ? 'Update' : 'Add'}} Product </h6>
+                                            <h6 class="card-title">{{(isset($place)) ? 'Update' : 'Add'}} Place </h6>
                                             <div class="header-elements">
                                                 <div class="list-icons">
                                                     <a class="list-icons-item" data-action="collapse"></a>
@@ -77,15 +77,15 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            @if(isset($product))
-                                                {{ Form::model($product,['method'=>'put','route' => ['products.update',$product->id],'enctype' => 'multipart/form-data' , 'class' => 'js-form' ]) }}
+                                            @if(isset($place))
+                                                {{ Form::model($place,['method'=>'put','route' => ['places.update',$place->id],'enctype' => 'multipart/form-data' , 'class' => 'js-form' ]) }}
                                             @else
-                                                {{ Form::open(['route' => 'products.store' ,'enctype' => 'multipart/form-data' , 'class' => 'js-form'] ) }}
+                                                {{ Form::open(['route' => 'places.store' ,'enctype' => 'multipart/form-data' , 'class' => 'js-form'] ) }}
                                             @endif
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('user_id','Select Vendor') }}<span style="color:red;">*</span>
+                                                        {{ Form::label('user_id','Select User') }}<span style="color:red;">*</span>
                                                         {{ Form::select('user_id', $user ,null, ['class' => 'form-control select2', 'style'=> 'margin-bottom:20px;' , 'data-validate-field' => 'user_id']) }}
 
                                                         {!! $errors->first('user_id', '<label id="user-id-error" class="error" for="user_id">:message</label>') !!}
@@ -93,7 +93,8 @@
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('photo',' Image') }}<span style="color:red;">*</span>
+                                                        {{ Form::label('photo','Location Image') }}
+                                                        <span >(Optional)</span>
                                                         {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
                                                         <p id="error1" style="display:none; color:#B81111;">
@@ -108,7 +109,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('category_id','Select Category Category') }}<span style="color:red;">*</span>
+                                                        {{ Form::label('category_id','Select Category') }}<span style="color:red;">*</span>
                                                         @php $category[''] = 'Please Select Category'; @endphp
                                                         {{ 
 
@@ -120,8 +121,8 @@
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('tags','Tags') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('tags',old('tags'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Tags', 'data-role' => 'tagsinput' ,'id' => 'courseTags' , 'data-validate-field' => 'tags')) }}
+                                                        {{ Form::label('tags','Tags') }}<span >(Optional)</span>
+                                                        {{ Form::text('tags',old('tags'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Tags', 'data-role' => 'tagsinput' ,'id' => 'courseTags')) }}
                                                         {!! $errors->first('tags', '<label id="tags-error" class="error" for="tags">:message</label>') !!}
                                                     </div>
                                                 </div>
@@ -129,18 +130,25 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('title','Title') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('title',old('title'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter title' , 'data-validate-field' => 'title')) }}
-                                                        {!! $errors->first('title', '<label id="title-error" class="error" for="title">:message</label>') !!}
+                                                        {{ Form::label('name','Location Name') }}<span style="color:red;">*</span>
+                                                        {{ Form::text('name',old('name'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter location name' , 'data-validate-field' => 'name')) }}
+                                                        {!! $errors->first('name', '<label id="name-error" class="error" for="name">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('phone','Phone') }}<span style="color:red;">*</span>
+                                                        {{ Form::text('phone',old('phone'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Phone Number'  , 'data-validate-field' => 'phone')) }}
+                                                        {!! $errors->first('phone', '<label id="name-error" class="error" for="name">:message</label>') !!}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('description','Product Description') }}<span style="color:red;">*</span>
-                                                        {{ Form::textarea('description',old('description'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Product Description' , 'data-validate-field' => 'description')) }}
-                                                        {!! $errors->first('description', '<label id="description-error" class="error" for="description">:message</label>') !!}
+                                                        {{ Form::label('address','Location Address') }}<span style="color:red;">*</span>
+                                                        {{ Form::text('address',old('address'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Place Address')) }}
+                                                        {!! $errors->first('address', '<label id="address-error" class="error" for="address">:message</label>') !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,13 +202,10 @@
             category_id: {
                 required: true
             },
-            tags: {
+            name: {
                 required: true
             },
-            title: {
-                required: true
-            },
-            description: {
+            phone: {
                 required: true
             },
         },
@@ -211,14 +216,11 @@
             category_id: {
                 required: 'Category is required',
             },
-            tags: {
-                required: 'Tags are required',
+            name: {
+                required: 'Location name is required',
             },
-            title: {
-                required: 'Title is required',
-            },
-            description: {
-                required: 'Description is required',
+            phone: {
+                required: 'Phone number is required',
             },
         },
     });

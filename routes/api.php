@@ -22,9 +22,9 @@ Route::post('/password/reset', 'API\ResetPasswordController@reset')->name('custo
 
 Route::post('/upload', 'API\FileController@upload');
 
-Route::post('/product/{keyword?}{slug?}', 'API\ProductController@show');
-
 Route::get('/places', 'API\PlaceController@show_all');
+
+Route::get('/services', 'API\ServiceController@show_all');
 
 Route::group(['middleware' => 'auth:api'], function(){
 
@@ -34,25 +34,23 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 	Route::get('/details', 'API\UserController@details');
 	
-	Route::get('/total_places', 'API\UserController@total_places');
+	Route::get('user/places/', 'API\UserController@places');
 
-	Route::get('/total_places', 'API\UserController@total_places');
-
-	Route::get('/disapproved_places', 'API\UserController@disapproved_places');
-
-	Route::get('/approved_places', 'API\UserController@approved_places');
+	Route::get('user/services/', 'API\UserController@services');
 
 	Route::post('/password/change', 'API\ChangePasswordController@change');
 
 	Route::get('/categories', 'API\CategoryController@index');
 
 	Route::get('/category/places/{id}', 'API\CategoryController@places');
-
 	Route::post('/place/add', 'API\PlaceController@store');
-
 	Route::get('/place/show/{id}', 'API\PlaceController@show');
-
 	Route::post('/place/rating/{id}', 'API\PlaceController@store_rating');
+	Route::get('/place/rating/{id}', 'API\PlaceController@show_rating');
 
-	Route::get('/place/rating/{id}', 'API\PlaceController@show_rating');	
+	Route::get('/category/services/{id}', 'API\CategoryController@services');
+	Route::post('/service/add', 'API\ServiceController@store');
+	Route::get('/service/show/{id}', 'API\ServiceController@show');
+	Route::post('/service/rating/{id}', 'API\ServiceController@store_rating');
+	Route::get('/service/rating/{id}', 'API\ServiceController@show_rating');
 });

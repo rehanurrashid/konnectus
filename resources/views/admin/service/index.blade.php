@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Debate')
+@section('title', 'Services')
 
 @push('before-styles')
     <style>
@@ -46,7 +46,7 @@
         <div class="content-wrapper">
 
             <!-- Page header -->
-                @include('admin.includes.pageheader');
+                @include('admin.includes.pageheader')
             <!-- /page header -->
 
 
@@ -71,7 +71,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div>
-                                    <a class="btn btn-dark w-25" href="{{ route('debates.create') }}">Add New</a>
+                                    <a class="btn btn-dark w-25 disabled" href="{{ route('services.create') }}" >Add New</a>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                                 <div>
                                     <div class="card">
                                         <div class="card-header header-elements-inline">
-                                            <h5 class="card-title">Debate List</h5>
+                                            <h5 class="card-title">Services List</h5>
 
                                             <div class="header-elements">
                                                 <div class="list-icons">
@@ -94,9 +94,10 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>User Name</th>
-                                                <th>Topic</th>
-                                                <th>Description</th>
-                                                <th>Image</th>
+                                                <th>Location Name</th>
+                                                <th>Phone</th>
+                                                <th>Status</th>
+                                                <th>Tags</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
@@ -110,13 +111,14 @@
                                                     serverSide: true,
                                                     autoWidth: false,
                                                     responsive: true,
-                                                    ajax: '{!! route('debates.index') !!}',
+                                                    ajax: '{!! route('services.index') !!}',
                                                     columns: [
                                                         { data: 'id', name: 'id' },
                                                         { data: 'user_name', name: 'user_name' },
-                                                        { data: 'topic', name: 'topic' },
-                                                        { data: 'description', name: 'description' },
-                                                        { data: 'image', name: 'image' },
+                                                        { data: 'name', name: 'name' },
+                                                        { data: 'phone', name: 'phone' },
+                                                        { data: 'status', name: 'status' },
+                                                        { data: 'tags', name: 'tags' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],
                                                     buttons: {

@@ -52,7 +52,7 @@ class User extends Authenticatable
     // }
 
     public function total_places(){
-        return $this->hasMany(Place::class,'user_id','id');
+        return $this->hasMany(Place::class,'user_id','id')->with('category');
     }
 
     public function disapproved_places(){
@@ -61,6 +61,18 @@ class User extends Authenticatable
 
     public function approved_places(){
         return $this->hasMany(Place::class,'user_id','id')->where('status', 1);
+    }
+
+    public function total_services(){
+        return $this->hasMany(Service::class,'user_id','id')->with('category');
+    }
+
+    public function disapproved_services(){
+        return $this->hasMany(Service::class,'user_id','id')->where('status', 0);
+    }
+
+    public function approved_services(){
+        return $this->hasMany(Service::class,'user_id','id')->where('status', 1);
     }
 
     /**
@@ -74,30 +86,4 @@ class User extends Authenticatable
         $this->notify(new PasswordResetNotification($token));
     }
 
-     /**
-     * Get the user's Plan.
-     */
-    // public function package()
-    // {
-    //     return $this->hasOneThrough(
-    //         Plan::class,
-    //         UserPlan::class,
-    //         'user_id', // Foreign key on User Plan table...
-    //         'user_plan_id', // Foreign key on User table...
-    //         'id', // Local key on User table...
-    //         'id' // Local key on Userplan table...
-    //     );
-    // }
-
-    /**
-     * Get the user's Courses.
-     */
-    // public function courses()
-    // {
-    //     return $this->belongsToMany(Course::class, 'course_user','user_id','course_id');
-    // }
-
-    // public function comment_liked(){
-    //     return $this->belongsToMany(Comment::class,'comment_likes');
-    // }
 }

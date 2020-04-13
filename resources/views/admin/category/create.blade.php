@@ -68,36 +68,67 @@
                                         </div>
                                         <div class="card-body">
                                             @if(isset($category))
-                                                {{ Form::model($category,['method'=>'post','route' => ['categories.store'] , 'class' => 'js-form']) }}
+                                                {{ Form::model($category,['method'=>'post','route' => ['categories.store'] , 'class' => 'js-form', 'enctype' => 'multipart/form-data']) }}
                                             @else
-                                                {{ Form::open(['route' => 'categories.index' , 'class' => 'js-form']) }} 
+                                                {{ Form::open(['route' => 'categories.index' , 'class' => 'js-form', 'enctype' => 'multipart/form-data']) }} 
                                             @endif
                                             <div class="row">
-                                                <div class="col">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{ Form::label('type','Select Type') }}<span style="color:red;">*</span>
+
+                                                        <select name="type" id="type" class="form-control select2 dynamic" data-dependent="parent_id" data-validate-field="type">
+                                                            <option value="">Please Select Type of Category</option>
+                                                            <option value="place">Place</option>
+                                                            <option value="service">Service</option>
+                                                        </select>
+
+                                                        {!! $errors->first('type', '<label id="type-error" class="error" for="type">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{ Form::label('parent_id','Select Parent Category') }}<span style="color:red;">*</span>
+
+                                                        <select name="parent_id" id="parent_id" class="form-control select2" data-dependent="parent_id">
+                                                            <option value="">Please First Select Type of Category</option>
+                                                            
+                                                        </select>
+
+                                                        {!! $errors->first('parent_id', '<label id="parent_id-error" class="error" for="parent_id">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         {{ Form::label('name','Category Name') }}<span style="color:red;">*</span>
                                                         {{ Form::text('name',old('name'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Category Name', 'data-validate-field' => 'name')) }}
                                                         {!! $errors->first('name', '<label id="name-error" class="error" for="name">:message</label>') !!}
                                                     </div>
                                                 </div>
-                                                <div class="col">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
-                                                        {{ Form::label('parent_id','Select Parent Category') }}<span style="color:red;">*</span>
-                                                        @php $category[''] = 'Please Select Parent Category'; @endphp
-                                                        {{ 
-
-                                                            Form::select('parent_id', $category ,null, ['class' => 'form-control select2', 'style'=> 'margin-bottom:20px;']) 
-                                                        }}
-
-                                                        {!! $errors->first('parent_id', '<label id="parent_id-error" class="error" for="parent_id">:message</label>') !!}
+                                                        {{ Form::label('photo','User Image') }}<span style="color:red;">*</span>
+                                                        {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
+                                                        {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
+                                                        <p id="error1" style="display:none; color:#B81111;">
+                                                        Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
+                                                        </p>
+                                                        <p id="error2" style="display:none; color:#B81111;">
+                                                        Maximum File Size Limit is 5MB.
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="d-flex justify-content-end align-items-center">
-                                                <button type="submit"  class="btn bg-blue ml-3">{{(!isset($category)) ? 'Update' : 'Save'}} </button>
+                                                <button type="submit"  class="btn bg-blue ml-3">Save </button>
                                             </div>
-
+                                            {{ csrf_field() }}
                                             {{ Form::close() }}
                                         </div>
                                     </div>
@@ -121,11 +152,43 @@
         <!-- /main content -->
 
     </div>
+
+<!-- validation -->
+<script type="text/javascript" src="{{ asset('admin/js/imageValidate.js') }}"></script>
+
 <script src="{{ asset('js/just-validate.min.js') }}"></script>
 
 <script type="text/javascript">
     
-        // searchable dropdown
+    // dependent dropdown 
+    $('.dynamic').change(function(){
+        if($(this).val() != ''){
+
+            let select = $(this).attr('id');
+            let value  = $(this).val();
+            let dependent = $(this).data('dependent');
+            let _token  = $('input[name="_token"]').val();
+            
+            $.ajax({
+                url: '{{ route("dynamicdependent.fetch") }}',
+                method: 'POST',
+                data: {
+                    select:select,
+                    value:value,
+                    dependent:dependent,
+                    _token:_token
+                },
+                success:function(response){
+
+                    $('#'+dependent).html(response);
+
+                }
+            })
+
+        }
+    })
+    
+    // searchable dropdown
     $('.select2').select2();
 
         new window.JustValidate('.js-form', {
@@ -133,10 +196,22 @@
             name: {
                 required: true
             },
+            type:{
+                required:true
+            },
+            photo:{
+                required:true
+            }
         },
         messages: {
             name: {
                 required: 'Category name is required',
+            },
+            type: {
+                required: 'Category type is required',
+            },
+            photo: {
+                required: 'Category image is required',
             },
         },
     });

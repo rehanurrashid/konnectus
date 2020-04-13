@@ -140,7 +140,7 @@
                                                 </div>
                                                 <div class="col">
                                                 	@if(!empty($place->image))
-													<img src="{{ asset('storage/storage/'.$place->image) }}" alt="Location Image">
+													<img src="{{ asset('storage/storage/'.$place->image) }}" alt="Location Image" width="30%">
 													@else
 													<h4>No Image</h4>
                                                 	@endif
