@@ -43,7 +43,7 @@ class PlaceController extends Controller
         $place->name = $request->name;
         $place->setAttribute('slug', $request->name);
         $place->address = $request->address;
-        $place->image = $filename;
+        $place->image = $request['picture'];
         $place->phone = $request->phone;
         $place->longitude = $request->longitude;
         $place->latitude = $request->latitude;

@@ -43,7 +43,7 @@ class ServiceController extends Controller
         $service->name = $request->name;
         $service->setAttribute('slug', $request->name);
         $service->address = $request->address;
-        $service->image = $filename;
+        $service->image = $request['picture'];
         $service->phone = $request->phone;
         $service->longitude = $request->longitude;
         $service->latitude = $request->latitude;
