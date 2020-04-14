@@ -22,10 +22,11 @@ class Category extends Model
     }
 
     public function places(){
-    	return $this->hasMany(Place::class,'category_id','id');
+    	return $this->hasMany(Place::class,'category_id','id')->with('rating')->withCount('rating');
+
     }
 
     public function services(){
-        return $this->hasMany(Service::class,'category_id','id');
+        return $this->hasMany(Service::class,'category_id','id')->with('rating')->withCount('rating');
     }
 }

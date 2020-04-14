@@ -20,12 +20,11 @@ Route::view('/', 'welcome',['name' => 'Konnectus']);
 
 Route::match(['get','post'],'/home', 'HomeController@index')->name('home');
 
-
 // Admin Routes 
 
 Route::post('admin/logout', 'Auth\LoginController@logout')->name('admin.logout');
 
-Route::prefix('admin')->middleware(['auth:web','can:isAdmin'])->group(function () {
+Route::prefix('admin')->middleware(['auth:web','check.role:admin'])->group(function () {
 
 	Route::get('dashboard','AdminController@index')->name('admin.dashboard');
   	Route::get('acount-settings/{id}/edit','AdminController@edit')->name('admin.account.edit');

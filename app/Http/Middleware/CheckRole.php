@@ -14,10 +14,13 @@ class CheckRole
      * @return mixed
      */
     public function handle($request, Closure $next, ...$role)
-    {
-        if(! $request->user()->roles->whereIn('name',$role)->first()){
-            return redirect()->route('home')->with('status','You are not Allowed!');
+    {   
+        // dd($request->user()->role == 'admin');
+        if($request->user()->role == 'admin'){
+            return $next($request);
         }
-        return $next($request);
+        else{
+            return redirect()->route('home')->with('status','You are not allowed to access Admin Panel!');
+        }
     }
 }

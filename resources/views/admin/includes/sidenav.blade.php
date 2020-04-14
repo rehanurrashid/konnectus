@@ -21,7 +21,7 @@
         </li>
         <li class="nav-item">
             <a href="{{ route('services.index') }}" class="nav-link {{Request::is(['services','services/*']) ? 'active' : ''}}">
-                <i class="icon-user"></i>
+                <i class="fa fa-archive" aria-hidden="true"></i>
                 <span>
                     Services Management
                 </span>
@@ -29,7 +29,7 @@
         </li>
         <li class="nav-item">
             <a href="{{ route('places.index') }}" class="nav-link {{Request::is(['places','places/*']) ? 'active' : ''}}">
-                <i class="icon-user"></i>
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
                 <span>
                     Places Management
                 </span>
@@ -37,7 +37,7 @@
         </li>
         <li class="nav-item">
             <a href="{{ route('categories.index') }}" class="nav-link {{Request::is(['categories','categories/*']) ? 'active' : ''}}">
-                <i class="icon-user"></i>
+                <i class="fa fa-list-alt" aria-hidden="true"></i>
                 <span>
                     Category Management
                 </span>

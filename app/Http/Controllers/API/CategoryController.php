@@ -35,21 +35,49 @@ class CategoryController extends Controller
     	$category = Category::with('places')->where('id', $id)->first();
 
     	if(!empty($category->places)){
-    		return response()->json(['Categories'=>$category], 200);
+
+            foreach ($category->places as $row) {
+                
+                if(!empty($row->rating)){
+                    $rate = $row->rating->avg('rate');
+                    $rate = number_format((float)$rate, 1, '.', '');
+                    $row->avg_rate = $rate;
+                }
+                else {
+                    $row->avg_rate = 'No Rating!';
+                }    
+
+            }
+
+    		return response()->json(['categories'=>$category ,'message' => 'success'], 200);
     	}
     	else{
-    		return response()->json(['Categories'=>'No Places Found!'], 200);
+    		return response()->json(['categories'=>'No Places Found!' ,'message' => 'error'], 200);
     	}
     }
 
     public function services($id){
         
-        $category = Category::with('services')->where('id', $id)->first();
-        if(!empty($category->places)){
-            return response()->json(['Categories'=>$category], 200);
+        $service = Category::with('services')->where('id', $id)->first();
+
+        if(!empty($service->services)){
+
+            foreach ($service->services as $row) {
+                
+                if(!empty($row->rating)){
+                    $rate = $row->rating->avg('rate');
+                    $rate = number_format((float)$rate, 1, '.', '');
+                    $row->avg_rate = $rate;
+                }
+                else {
+                    $row->avg_rate = 'No Rating!';
+            } 
+        }
+            
+            return response()->json(['service'=>$service,'message' => 'success'], 200);
         }
         else{
-            return response()->json(['Categories'=>'No Products Found!'], 200);
+            return response()->json(['service'=>'No Services Found!','message' => 'error'], 200);
         }
     }
 }

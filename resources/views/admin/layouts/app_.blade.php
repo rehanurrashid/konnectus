@@ -18,7 +18,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    
+    <script type="text/javascript" src="https://kit.fontawesome.com/f4ababfdfc.js"></script>
 </head>
 <body>
     <div id="app">

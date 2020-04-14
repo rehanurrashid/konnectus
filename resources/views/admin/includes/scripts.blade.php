@@ -10,4 +10,6 @@
 <!-- Theme JS files -->
 
 <!-- /theme JS files -->
+
+<script type="text/javascript" src="https://kit.fontawesome.com/f4ababfdfc.js"></script>
 @stack('after-scripts')

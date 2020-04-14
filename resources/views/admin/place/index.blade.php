@@ -68,13 +68,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div>
-                                    <a class="btn btn-dark w-25 disabled" href="{{ route('places.create') }}" >Add New</a>
-                                </div>
-                            </div>
-                        </div>
                         <br>
                         <div class="row">
                             <div class="col-lg-12">

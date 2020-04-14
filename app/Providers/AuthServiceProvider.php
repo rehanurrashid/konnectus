@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport; 
+use App\Gates\RoleGates;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -33,14 +34,8 @@ class AuthServiceProvider extends ServiceProvider
         //     $roles = $user->roles->pluck('name')->toArray();
         //     return array_intersect($allowed->all(),$roles);
         // });
-        Gate::define('isAdmin', function($user){
-            if($user->role == 'admin'){
-                return 'true';
-            }
-            else{
-                return false;
-            }
-        });
+
+        Gate::define('isAllowed', 'App\Gates\RoleGate@allowed');
         // Gate::define('allow-edit','App\Gates\PostGates@allowedAction');
     }
 }
