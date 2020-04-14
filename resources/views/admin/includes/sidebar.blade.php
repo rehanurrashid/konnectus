@@ -22,7 +22,10 @@
                 <div class="media">
                     <div class="mr-3">
                         <a href="{{ route('admin.account.edit', [Auth::user()->id]) }}">
-                            <img src="{{ !empty($profile->photo) ? asset('storage/storage/'.$profile->photo) : asset('images/profileavatar.png')}}" 
+                            <img src="
+                            {{
+                            (!empty(auth()->user()->profile->photo)) ? auth()->user()->profile->photo : asset('images/profileavatar.png')
+                            }}" 
                             width="38" height="38" class="rounded-circle" alt="profile picture"></a>
                     </div>
 

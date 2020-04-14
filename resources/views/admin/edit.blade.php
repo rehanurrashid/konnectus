@@ -31,7 +31,6 @@
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>
     <script src="{{ asset('admin/js/demo_pages/dashboard.js') }}"></script>
-    <link href="{{ asset('admin/css/myvalidate.css') }}" rel="stylesheet" type="text/css">
 @endpush
 
 @section('content')
@@ -75,20 +74,20 @@
                                         </div>
                                         <div class="card-body">
                                             @if(isset($user))
-                                                {{ Form::model($user,['method'=>'put','route' => ['admin.account.update',$user->id], 'enctype' =>'multipart/form-data']) }}
+                                                {{ Form::model($user,['method'=>'put','route' => ['admin.account.update',$user->id], 'enctype' =>'multipart/form-data', 'class' => 'js-form']) }}
                                             @endif
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('name','Name') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('name',old('name'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter User Name')) }}
+                                                        {{ Form::text('name',old('name'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter User Name', 'data-validate-field' => 'name')) }}
                                                         {!! $errors->first('name', '<label id="name-error" class="error" for="name">:message</label>') !!}
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('email','Email') }}<span style="color:red;">*</span>
-                                                        {{ Form::email('email',old('email'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Email Address')) }}
+                                                        {{ Form::email('email',old('email'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Email Address' , 'data-validate-field' => 'email')) }}
                                                         {!! $errors->first('email', '<label id="email-error" class="error" for="email">:message</label>') !!}
                                                     </div>
                                                 </div>
@@ -97,14 +96,14 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('password','Password') }}<span style="color:red;">*</span>
-                                                        {{ Form::password('password', array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter New Password')) }}
+                                                        {{ Form::password('password', array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter New Password' , 'data-validate-field' => 'password')) }}
                                                         {!! $errors->first('password', '<label id="password-error" class="error" for="password">:message</label>') !!}
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('phone','Phone') }}<span style="color:red;">*</span>
-                                                        {{ Form::number('phone',old('phone',$user->profile->phone),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Phone Number')) }}
+                                                        {{ Form::number('phone',old('phone',$user->profile->phone),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Phone Number' , 'data-validate-field' => 'phone')) }}
                                                         {!! $errors->first('phone', '<label id="name-error" class="error" for="name">:message</label>') !!}
                                                     </div>
                                                 </div>
@@ -113,14 +112,14 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('city','City') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('city',old('city',$user->profile->city),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter City Name')) }}
+                                                        {{ Form::text('city',old('city',$user->profile->city),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter City Name' , 'data-validate-field' => 'city')) }}
                                                         {!! $errors->first('city', '<label id="city-error" class="error" for="city">:message</label>') !!}
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('country','Country') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('country',old('country',$user->profile->country),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Country Name')) }}
+                                                        {{ Form::text('country',old('country',$user->profile->country),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Country Name' , 'data-validate-field' => 'country')) }}
                                                         {!! $errors->first('country', '<label id="country-error" class="error" for="country">:message</label>') !!}
                                                     </div>
                                                 </div>
@@ -130,7 +129,7 @@
                                                     <div class="form-group">
 
                                                         {{ Form::label('address','Address') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('address',old('address',$user->profile->address), array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter  Address')) }}
+                                                        {{ Form::text('address',old('address',$user->profile->address), array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter  Address' , 'data-validate-field' => 'address')) }}
                                                         {!! $errors->first('address', '<label id="address-error" class="error" for="address">:message</label>') !!}
                                                     </div>
                                                 </div>
@@ -138,9 +137,16 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('photo','User Image') }}<span style="color:red;">*</span>
+                                                        {{ Form::label('photo','Location Image') }}
+                                                        <span >(Optional)</span>
                                                         {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
+                                                        <p id="error1" style="display:none; color:#B81111;">
+                                                        Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
+                                                        </p>
+                                                        <p id="error2" style="display:none; color:#B81111;">
+                                                        Maximum File Size Limit is 5MB.
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -152,13 +158,13 @@
                                                         @if(empty($user->profile->photo))
                                                         <h4 class="text-info">No Image Uploaded yet!</h4>
                                                         @else
-                                                       <img src="{{asset('storage/storage/'.$user->profile->photo) }}" class="img-fluid img-thumbnail" alt="Responsive image" height="300px" width="300px">
+                                                       <img src="{{$user->profile->photo}}" class="img-fluid img-thumbnail" alt="Responsive image" height="300px" width="300px">
                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-end align-items-center">
-                                                <button type="submit" name="submit" class="btn bg-blue ml-3">{{(isset($user)) ? 'Update' : 'Save'}} </button>
+                                                <button type="submit" class="btn bg-blue ml-3">{{(isset($user)) ? 'Update' : 'Save'}} </button>
                                             </div>
 
                                             {{ Form::close() }}
@@ -185,10 +191,65 @@
         <!-- /main content -->
 
     </div>
-<script type="text/javascript" src="{{ asset('admin/js/jquery.validate.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('admin/js/myvalidate.js') }}"></script>
-<script>
+<!-- validation -->
+<script type="text/javascript" src="{{ asset('admin/js/imageValidate.js') }}"></script>
+
+<script src="{{ asset('js/just-validate.min.js') }}"></script>
+
+<script type="text/javascript">
+    
         // searchable dropdown
     $('.select2').select2();
+
+        new window.JustValidate('.js-form', {
+        rules: {
+            name: {
+                required: true
+            },
+            email: {
+                required: true,
+                email: true,
+            },
+            password: {
+                required: true
+            },
+            phone: {
+                required: true
+            },
+            city: {
+                required: true
+            },
+            country: {
+                required: true
+            },
+            address: {
+                required: true
+            },
+        },
+        messages: {
+            name: {
+                required: 'Admin name is required',
+            },
+            email: {
+                required: 'Admin email address is required',
+                email: 'Please enter a valid email address'
+            },
+            password: {
+                required: 'Admin password is required',
+            },
+            phone: {
+                required: 'Admin phone is required',
+            },
+            city: {
+                required: 'Admin city is required',
+            },
+            country: {
+                required: 'Admin country is required',
+            },
+            address: {
+                required: 'Admin address is required',
+            },
+        },
+    });
 </script>
 @endsection

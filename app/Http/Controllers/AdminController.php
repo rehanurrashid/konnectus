@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\PasswordSentEmail;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreUser;
 use App\UserProfile;
 use App\User;
 use Mail;
@@ -28,7 +29,7 @@ class AdminController extends Controller
         return view('admin.edit',compact('user'));
     }
 
-     public function update(Request $request, $id)
+     public function update(StoreUser $request, $id)
     {
         $password = $request->password;
         $hash_password = Hash::make($password);
@@ -64,7 +65,7 @@ class AdminController extends Controller
                 $profile->city      = $request->city;
                 $profile->country   = $request->country;
                 $profile->phone     = $request->phone;
-                $profile->photo     = $filename;
+                $profile->photo     = $request['picture'] ;
                 $profile->save();
 
             // $profile = $user->profile()->save($profile);

@@ -25,11 +25,11 @@ class StoreUser extends FormRequest
     {
         return [
             'name' => 'bail|required|string|max:255',
-            'email' => 'bail|required|unique:users,email',
+            'email' => 'bail|required|unique:users,email,'.auth()->user()->id,
+            'phone' => 'required|unique:user_profiles,phone,'.auth()->user()->id.',user_id',
             'address' => 'bail|required',
             'city' => 'bail|required|alpha_dash ',
             'country' => 'bail|required|alpha_dash',
-            'phone' => 'bail|required',
             'photo' => 'bail|required|image|mimes:jpeg,png,jpg,gif,svg',
         ];
     }
