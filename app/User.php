@@ -10,6 +10,8 @@ use App\Notifications\PasswordResetNotification;
 use Laravel\Passport\HasApiTokens;
 use App\UserProfile;
 use App\Place;
+use App\ServiceRating;
+use App\PlaceRating;
 
 class User extends Authenticatable
 {
@@ -43,6 +45,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'myReviewsCount',
+        // 'rateCount'
+    ];
+
     public function profile(){
         return $this->hasOne(UserProfile::class); 
     }
@@ -52,7 +59,7 @@ class User extends Authenticatable
     // }
 
     public function total_places(){
-        return $this->hasMany(Place::class,'user_id','id')->with('category');
+        return $this->hasMany(Place::class,'user_id','id')->with('category')->withCount('rating');
     }
 
     public function disapproved_places(){
@@ -84,6 +91,20 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new PasswordResetNotification($token));
+    }
+
+    public function service_reviews()
+    {
+        return $this->hasMany(ServiceRating::class, 'service_id','id');
+    }
+
+    public function place_reviews()
+    {
+        return $this->hasMany(PlaceRating::class, 'place_id','id');
+    }
+
+    public function getMyReviewsCountAttribute(){
+        return $this->service_reviews()->count() + $this->place_reviews()->count();
     }
 
 }

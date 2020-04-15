@@ -45,6 +45,6 @@ class Service extends Model
 
     public function rating()
     {
-        return $this->hasMany(ServiceRating::class, 'service_id','id');
+        return $this->hasMany(ServiceRating::class, 'service_id','id')->with('user');
     }
 }

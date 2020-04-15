@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
-use App\Http\Requests\StorePlace;
+use App\Http\Requests\StoreService;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use App\Category;
-use App\Place;
+use App\Service;
 use App\User;
 
 
-class PlaceController extends Controller
+class PendingServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,22 +23,22 @@ class PlaceController extends Controller
     {
         if($request->ajax()){
 
-            $place = Place::with(['user:id,name','rating'])->withCount('rating')->get();
-            // dd($place[0]->rating[0]->rate);
+            $service = Service::with(['user:id,name'])->withCount('rating')->where('status',0)->get();
 
-            foreach ($place as $row) {
+            foreach ($service as $row) {
 
                 $rate = $row->rating()->avg('rate');
                 $rate = number_format((float)$rate, 1, '.', '');
                 $row->avg_rate = $rate;
 
             }
-            return Datatables::of($place)
-                ->addColumn('action', function ($place) {
-                    return view('admin.actions.actions_place',compact('place'));
+
+            return Datatables::of($service)
+                ->addColumn('action', function ($service) {
+                    return view('admin.actions.actions_pending_service',compact('service'));
                     })
-                ->addColumn('user_name', function ($place) {
-                    return $place->user->name;
+                ->addColumn('user_name', function ($service) {
+                    return $service->user->name;
                     })
                 ->addColumn('rate', function ($place) {
                     return $place->avg_rate;
@@ -49,7 +49,7 @@ class PlaceController extends Controller
                 ->editColumn('id', 'ID: {{$id}}')
                 ->make(true);
         }
-       return view('admin.place.index');
+       return view('admin.pending_service.index');
     }
 
     /**
@@ -61,7 +61,7 @@ class PlaceController extends Controller
     {
         $user = User::pluck('name','id');
         $category = Category::pluck('name', 'id');
-        return view('admin.place.create',compact('user','category'));
+        return view('admin.pending_service.create',compact('user','category'));
     }
 
     /**
@@ -70,7 +70,7 @@ class PlaceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePlace $request)
+    public function store(Storeservice $request)
     {     
         if ($request['photo']){
             
@@ -80,20 +80,20 @@ class PlaceController extends Controller
             $filename = $request->file('photo')->hashName();
         }
 
-        $place = new place;
-        $place->user_id = $request->user_id;
-        $place->category_id = $request->category_id;
-        $place->setAttribute('slug', $request->title);
-        $place->title = $request->title;
-        $place->tags = $request->tags;
-        $place->description = $request->description;
-        $place->image = $filename;
-        $place->save();
+        $service = new Service;
+        $service->user_id = $request->user_id;
+        $service->category_id = $request->category_id;
+        $service->setAttribute('slug', $request->title);
+        $service->title = $request->title;
+        $service->tags = $request->tags;
+        $service->description = $request->description;
+        $service->image = $filename;
+        $service->save();
 
-        if($place){
-            Session::flash('message', 'Place Created Successfully!'); 
+        if($service){
+            Session::flash('message', 'Service Created Successfully!'); 
             Session::flash('alert-class', 'alert-success');
-            return redirect('admin/places');
+            return redirect('admin/pending_services');
         }
     }
 
@@ -105,11 +105,11 @@ class PlaceController extends Controller
      */
     public function show($id)
     {
-        $place = Place::with(['user:id,name','category:id,name','rating'])->withCount(['rating'])->where('id',$id)->first();
-        $rate = $place->rating()->avg('rate');
+        $service = service::with(['user:id,name','category:id,name','rating'])->withCount(['rating'])->where('id',$id)->first();
+        $rate = $service->rating()->avg('rate');
         $rate = number_format((float)$rate, 1, '.', '');
-        $place->avg_rate = $rate;
-        return view('admin.place.show',compact('place'));
+        $service->avg_rate = $rate;
+        return view('admin.pending_service.show',compact('service'));
     }
 
     /**
@@ -120,10 +120,10 @@ class PlaceController extends Controller
      */
     public function edit($id)
     {   
-        $place = Place::find($id);
+        $service = service::find($id);
         $user = User::pluck('name','id');
         $category = Category::pluck('name', 'id');
-        return view('admin.place.edit',compact('place','user','category'));
+        return view('admin.pending_service.edit',compact('service','user','category'));
     }
 
     /**
@@ -135,15 +135,15 @@ class PlaceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $place = Place::find($id);
+        $service = service::find($id);
 
-        $place->status = $request->status;
-        $place->save();
+        $service->status = $request->status;
+        $service->save();
 
-        if($place){
-            Session::flash('message', 'Place Updated Successfully!'); 
+        if($service){
+            Session::flash('message', 'Service Updated Successfully!'); 
             Session::flash('alert-class', 'alert-success');
-            return redirect('admin/places');
+            return redirect('admin/pending_services');
         }
     }
 
@@ -155,9 +155,9 @@ class PlaceController extends Controller
      */
     public function destroy($id)
     {
-        $place = Place::find($id)->delete();
-        if($place){
-            return view('admin.place.index');
+        $service = Service::find($id)->delete();
+        if($service){
+            return view('admin.pending_service.index');
         }
     }
 }

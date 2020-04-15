@@ -11,31 +11,25 @@ use App\Category;
 use App\Place;
 use App\User;
 
-
-class PlaceController extends Controller
+class PendingPlaceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         if($request->ajax()){
 
-            $place = Place::with(['user:id,name','rating'])->withCount('rating')->get();
-            // dd($place[0]->rating[0]->rate);
+            $place = Place::with(['user:id,name'])->where('status',0)->withCount('rating')->get();
 
-            foreach ($place as $row) {
+             foreach ($place as $row) {
 
                 $rate = $row->rating()->avg('rate');
                 $rate = number_format((float)$rate, 1, '.', '');
                 $row->avg_rate = $rate;
 
             }
+
             return Datatables::of($place)
                 ->addColumn('action', function ($place) {
-                    return view('admin.actions.actions_place',compact('place'));
+                    return view('admin.actions.actions_pending_place',compact('place'));
                     })
                 ->addColumn('user_name', function ($place) {
                     return $place->user->name;
@@ -49,7 +43,7 @@ class PlaceController extends Controller
                 ->editColumn('id', 'ID: {{$id}}')
                 ->make(true);
         }
-       return view('admin.place.index');
+       return view('admin.pending_place.index');
     }
 
     /**
@@ -61,7 +55,7 @@ class PlaceController extends Controller
     {
         $user = User::pluck('name','id');
         $category = Category::pluck('name', 'id');
-        return view('admin.place.create',compact('user','category'));
+        return view('admin.pending_place.create',compact('user','category'));
     }
 
     /**
@@ -93,7 +87,7 @@ class PlaceController extends Controller
         if($place){
             Session::flash('message', 'Place Created Successfully!'); 
             Session::flash('alert-class', 'alert-success');
-            return redirect('admin/places');
+            return redirect('admin/pending_places');
         }
     }
 
@@ -109,7 +103,7 @@ class PlaceController extends Controller
         $rate = $place->rating()->avg('rate');
         $rate = number_format((float)$rate, 1, '.', '');
         $place->avg_rate = $rate;
-        return view('admin.place.show',compact('place'));
+        return view('admin.pending_place.show',compact('place'));
     }
 
     /**
@@ -123,7 +117,7 @@ class PlaceController extends Controller
         $place = Place::find($id);
         $user = User::pluck('name','id');
         $category = Category::pluck('name', 'id');
-        return view('admin.place.edit',compact('place','user','category'));
+        return view('admin.pending_place.edit',compact('place','user','category'));
     }
 
     /**
@@ -143,7 +137,7 @@ class PlaceController extends Controller
         if($place){
             Session::flash('message', 'Place Updated Successfully!'); 
             Session::flash('alert-class', 'alert-success');
-            return redirect('admin/places');
+            return redirect('admin/pending_places');
         }
     }
 
@@ -157,7 +151,7 @@ class PlaceController extends Controller
     {
         $place = Place::find($id)->delete();
         if($place){
-            return view('admin.place.index');
+            return view('admin.pending_place.index');
         }
     }
 }

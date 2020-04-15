@@ -23,13 +23,28 @@ class ServiceController extends Controller
     {
         if($request->ajax()){
 
-            $service = Service::with(['user:id,name'])->get();
+            $service = Service::with(['user:id,name','rating'])->withCount('rating')->get();
+
+            foreach ($service as $row) {
+
+                $rate = $row->rating()->avg('rate');
+                $rate = number_format((float)$rate, 1, '.', '');
+                $row->avg_rate = $rate;
+
+            }
+
             return Datatables::of($service)
                 ->addColumn('action', function ($service) {
                     return view('admin.actions.actions_service',compact('service'));
                     })
                 ->addColumn('user_name', function ($service) {
                     return $service->user->name;
+                    })
+                ->addColumn('rate', function ($place) {
+                    return $place->avg_rate;
+                    })
+                ->addColumn('reviews', function ($place) {
+                    return $place->rating_count;
                     })
                 ->editColumn('id', 'ID: {{$id}}')
                 ->make(true);
@@ -90,8 +105,10 @@ class ServiceController extends Controller
      */
     public function show($id)
     {
-        $service = service::with(['user:id,name','category:id,name'])->where('id',$id)->first();
-        // dd($service->user->name);
+        $service = service::with(['user:id,name','category:id,name','rating'])->withCount(['rating'])->where('id',$id)->first();
+        $rate = $service->rating()->avg('rate');
+        $rate = number_format((float)$rate, 1, '.', '');
+        $service->avg_rate = $rate;
         return view('admin.service.show',compact('service'));
     }
 

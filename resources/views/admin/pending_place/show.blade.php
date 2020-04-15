@@ -138,7 +138,7 @@
                                                 	<h4>
                                                 		{{($place->status == 0) ? 'Disapproved' : 'Approved'}}
                                                 		&nbsp; &nbsp; &nbsp;
-                                                		<a href="{{ route('places.edit', [$place->id]) }}" title="Change Status"><i class="icon-pencil5 mr-1 icon-1x"></i></a>
+                                                		<a href="{{ route('pending_places.edit', [$place->id]) }}" title="Change Status"><i class="icon-pencil5 mr-1 icon-1x"></i></a>
                                                 	</h4>
                                                 </div>
                                             </div>
@@ -158,7 +158,7 @@
                                                 </div>
                                                 <div class="col">
                                                 	@if(!empty($place->image))
-													<img src="{{$place->image }}" alt="Location Image" width="30%" class="img-thumbnail">
+													<img src="{{ $place->image }}" alt="Location Image" width="30%" class="img-thumbnail">
 													@else
 													<h4>No Image</h4>
                                                 	@endif

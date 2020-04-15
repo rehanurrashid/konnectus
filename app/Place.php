@@ -45,6 +45,6 @@ class Place extends Model
 
     public function rating()
     {
-        return $this->hasMany(PlaceRating::class, 'place_id','id');
+        return $this->hasMany(PlaceRating::class, 'place_id','id')->with('user');
     }
 }

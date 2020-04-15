@@ -20,6 +20,8 @@ class ServiceController extends Controller
             'longitude' => 'required',
             'latitude' => 'required',
             'image' => 'required',
+            'from_time' => 'required',
+            'to_time' => 'required',
         ]);
         if ($validator->fails()) { 
                 return response()->json(['error'=>$validator->errors()], 401);            
@@ -48,6 +50,8 @@ class ServiceController extends Controller
         $service->longitude = $request->longitude;
         $service->latitude = $request->latitude;
         $service->tags = $request->tags;
+        $service->from_time = $request->from_time;
+        $service->to_time = $request->to_time;
         $service->save();
 
         if($service){
@@ -61,7 +65,7 @@ class ServiceController extends Controller
 
     public function show($id){
 
-        $service = Service::with(['category'])->withCount(['rating'])->where('id',$id)->first();
+        $service = Service::with(['category','rating'])->withCount(['rating'])->where('id',$id)->first();
         $rate = $service->rating()->avg('rate');
         $rate = number_format((float)$rate, 1, '.', '');
         $service->avg_rate = $rate;

@@ -159,8 +159,20 @@ public $successStatus = 200;
      */ 
     public function details() 
     { 
-        $user= Auth::user();
+        $user= User::find(auth()->user()->id)->with(['service_reviews','place_reviews','total_places','total_services'])->withCount(['service_reviews','place_reviews'])->first();
         $profile = UserProfile::where('user_id', auth()->user()->id)->first();
+
+        foreach ($user->total_places as $place) {
+
+            $user->otherRateCount += $place->rating_count;
+
+        }
+
+        foreach ($user->total_services as $service) {
+
+            $user->otherRateCount += $place->rating_count;
+
+        }
 
         $user = [
             'name'      =>  $user->name,
@@ -168,19 +180,22 @@ public $successStatus = 200;
             'email_verified_at'  =>  $user->email_verified_at,
             'role'      =>  $user->role,
             'status_id' =>  $user->status_id,
-            'address'      =>  $profile->address,
-            'longitude'      =>  $profile->longitude,
-            'latitude'      =>  $profile->latitude,
-            'city'      =>  $profile->city,
-            'country'      =>  $profile->country,
-            'photo'      =>  $profile->photo,
-            'phone'      =>  $profile->phone,
-            'gender'      =>  $profile->gender,
-            'dob'      =>  $profile->dob,
+            'address'      =>  $user->profile->address,
+            'longitude'      =>  $user->profile->longitude,
+            'latitude'      =>  $user->profile->latitude,
+            'city'      =>  $user->profile->city,
+            'country'      =>  $user->profile->country,
+            'photo'      =>  $user->profile->photo,
+            'phone'      =>  $user->profile->phone,
+            'gender'      =>  $user->profile->gender,
+            'dob'      =>  $user->profile->dob,
+                'otherRateCount' => $user->otherRateCount,
+                'myReviewsCount' => $user->myReviewsCount,
             'created_at'      =>  $user->created_at,
-            'updated_at'      =>  $profile->updated_at,
+            'updated_at'      =>  $user->profile->updated_at,
             'deleted_at'      =>  $user->deleted_at,
         ];
+
         return response()->json(['user' => $user], $this-> successStatus); 
     } 
 

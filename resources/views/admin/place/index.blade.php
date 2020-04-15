@@ -90,6 +90,8 @@
                                                 <th>Location Name</th>
                                                 <th>Phone</th>
                                                 <th>Status</th>
+                                                <th>Rate</th>
+                                                <th>Total Reviews</th>
                                                 <th>Tags</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -111,6 +113,8 @@
                                                         { data: 'name', name: 'name' },
                                                         { data: 'phone', name: 'phone' },
                                                         { data: 'status', name: 'status' },
+                                                        { data: 'rate', name: 'rate' },
+                                                        { data: 'reviews', name: 'reviews' },
                                                         { data: 'tags', name: 'tags' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],

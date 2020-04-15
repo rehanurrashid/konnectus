@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Services')
+@section('title', 'Pending Services')
 
 @push('before-styles')
     <style>
@@ -74,7 +74,7 @@
                                 <div>
                                     <div class="card">
                                         <div class="card-header header-elements-inline">
-                                            <h5 class="card-title">Services List</h5>
+                                            <h5 class="card-title">Pending Services List</h5>
 
                                             <div class="header-elements">
                                                 <div class="list-icons">
@@ -106,7 +106,7 @@
                                                     serverSide: true,
                                                     autoWidth: false,
                                                     responsive: true,
-                                                    ajax: '{!! route('services.index') !!}',
+                                                    ajax: '{!! route('pending_services.index') !!}',
                                                     columns: [
                                                         { data: 'id', name: 'id' },
                                                         { data: 'user_name', name: 'user_name' },

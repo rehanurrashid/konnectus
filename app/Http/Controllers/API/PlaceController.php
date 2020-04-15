@@ -20,6 +20,8 @@ class PlaceController extends Controller
             'longitude' => 'required',
             'latitude' => 'required',
             'image' => 'required',
+            'from_time' => 'required',
+            'to_time' => 'required',
         ]);
         if ($validator->fails()) { 
                 return response()->json(['error'=>$validator->errors()], 401);            
@@ -48,6 +50,8 @@ class PlaceController extends Controller
         $place->longitude = $request->longitude;
         $place->latitude = $request->latitude;
         $place->tags = $request->tags;
+        $place->from_time = $request->from_time;
+        $place->to_time = $request->to_time;
         $place->save();
 
         if($place){
@@ -61,7 +65,7 @@ class PlaceController extends Controller
 
     public function show($id){
 
-        $place = Place::with(['category'])->withCount(['rating'])->where('id',$id)->first();
+        $place = Place::with(['category','rating'])->withCount(['rating'])->where('id',$id)->first();
         $rate = $place->rating()->avg('rate');
         $rate = number_format((float)$rate, 1, '.', '');
         $place->avg_rate = $rate;
