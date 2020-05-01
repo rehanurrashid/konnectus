@@ -14,7 +14,7 @@ class Category extends Model
     protected $guarded = [];
 
     public function children(){
-    	return $this->belongTo(Category::class, 'parent_id', 'id');
+    	return $this->hasMany(Category::class, 'parent_id', 'id');
     }
 
     public function parent(){
@@ -22,11 +22,15 @@ class Category extends Model
     }
 
     public function places(){
-    	return $this->hasMany(Place::class,'category_id','id')->with('rating')->withCount('rating');
+    	return $this->hasMany(Place::class,'category_id','id')->with(['rating','photos','languages'])->withCount('rating');
 
     }
 
     public function services(){
-        return $this->hasMany(Service::class,'category_id','id')->with('rating')->withCount('rating');
+        return $this->hasMany(Service::class,'category_id','id')->with(['rating','photos','languages'])->withCount('rating');
+    }
+
+    public function popular(){
+        return $this->belongsToMany(Category::class,'category_users');
     }
 }

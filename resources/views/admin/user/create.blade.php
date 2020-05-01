@@ -66,17 +66,36 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            @if(isset($user))
-                                                {{ Form::model($user,['method'=>'post','route' => ['users.store',$user->id], 'enctype' =>'multipart/form-data' , 'class' => 'js-form']) }}
-                                            @else
-                                                {{ Form::open(['route' => 'users.index', 'enctype' =>'multipart/form-data' , 'class' => 'js-form']) }}
-                                            @endif
+                                             <form class="js-form" method="POST" action="{{ route('users.store')}}" enctype="multipart/form-data">
+                                            @csrf
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('name','Name') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('name',old('name'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter User Name' ,'id' => 'name'  , 'data-validate-field' => 'name')) }}
+
+                                                        <input type="text" name="name" placeholder="Enter Full Name" data-validate-field="name" style="margin-bottom:10px;" id="name" class="form-control" value="{{old('name')}}">
+
                                                         {!! $errors->first('name', '<label id="name-error" class="error" for="name">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('username','Username') }}<span style="color:red;">*</span>
+
+                                                        <input type="text" name="username" placeholder="Enter Username" data-validate-field="username" style="margin-bottom:10px;" id="username" class="form-control" value="{{old('user')}}">
+
+                                                        {!! $errors->first('username', '<label id="username-error" class="error" for="username">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('phone','Phone') }}<span style="color:red;">*</span>
+
+                                                        <input type="text" name="phone" placeholder="Enter Phone Number"  style="margin-bottom:10px;" id="phone" class="form-control" value="{{old('phone')}}" data-validate-field="phone">
+
+                                                        {!! $errors->first('phone', '<label id="name-error" class="error" for="name">:message</label>') !!}
                                                     </div>
                                                 </div>
                                                 <div class="col">
@@ -90,8 +109,53 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('address','Address') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('address',old('address'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter  Address'  , 'data-validate-field' => 'address')) }}
+                                                        {{ Form::label('dob','DOB') }}<span style="color:blue;"> &nbsp; (optional)</span>
+
+                                                        <input type="date" name="dob" placeholder="Enter DOB"  style="margin-bottom:10px;" id="dob" class="form-control" value="{{old('dob')}}">
+
+                                                        {!! $errors->first('dob', '<label id="dob-error" class="error" for="dob">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('gender','Choose Gender') }}<span style="color:blue;"> &nbsp; (optional)</span>
+
+                                                        <select name="gender" class="form-control">
+                                                            <option selected>Choose Gender</option>
+                                                            <option value="male">Male</option>
+                                                            <option value="female">Female</option>
+                                                            <option value="other">Other</option>
+                                                        </select>
+
+                                                        {!! $errors->first('gender', '<label id="gender-error" class="error" for="gender">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('country','Country') }}<span style="color:blue;"> &nbsp; (optional)</span>
+
+                                                        <input type="text" name="country" placeholder="Enter Country"  style="margin-bottom:10px;" id="country" class="form-control" value="{{old('country')}}">
+
+                                                        {!! $errors->first('city', '<label id="city-error" class="error" for="city">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('city','City') }}<span style="color:blue;"> &nbsp; (optional)</span>
+
+                                                        <input type="text" name="city" placeholder="Enter City"  style="margin-bottom:10px;" id="city" class="form-control" value="{{old('city')}}">
+
+                                                        {!! $errors->first('city', '<label id="city-error" class="error" for="city">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('address','Address') }}<span style="color:blue;"> &nbsp; (optional)</span>
+                                                        <input type="text" name="address" placeholder="Enter Address" data-validate-field="address" style="margin-bottom:10px;" id="address" class="form-control" value="{{old('address')}}">
                                                         {!! $errors->first('address', '<label id="email-error" class="error" for="email">:message</label>') !!}
                                                     </div>
                                                 </div>
@@ -99,30 +163,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('city','City') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('city',old('city'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter City Name'  , 'data-validate-field' => 'city')) }}
-                                                        {!! $errors->first('city', '<label id="city-error" class="error" for="city">:message</label>') !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('country','Country') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('country',old('country'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Country Name'  , 'data-validate-field' => 'country')) }}
-                                                        {!! $errors->first('country', '<label id="country-error" class="error" for="country">:message</label>') !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('phone','Phone') }}<span style="color:red;">*</span>
-                                                        {{ Form::number('phone',old('phone'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Phone Number'  , 'data-validate-field' => 'phone')) }}
-                                                        {!! $errors->first('phone', '<label id="name-error" class="error" for="name">:message</label>') !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('photo','User Image') }}<span style="color:red;">*</span>
+                                                        {{ Form::label('photo','User Image') }}<span style="color:blue;"> &nbsp; (optional)</span>
                                                         {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
                                                         <p id="error1" style="display:none; color:#B81111;">
@@ -135,10 +176,10 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-end align-items-center">
-                                                <button type="submit" class="btn bg-blue ml-3">{{(isset($user)) ? 'Update' : 'Save'}} </button>
+                                                <button type="submit" class="btn bg-blue ml-3">
+                                                Save </button>
                                             </div>
-
-                                            {{ Form::close() }}
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -179,13 +220,7 @@
                 required: true,
                 email: true,
             },
-            address: {
-                required: true
-            },
-            city: {
-                required: true
-            },
-            country: {
+            username: {
                 required: true
             },
             phone: {
@@ -200,17 +235,11 @@
                 required: 'Email is required',
                 email: 'Please enter a valid email address',
             },
-            address: {
-                required: 'Address is required',
-            },
-            city: {
-                required: 'City is required',
-            },
-            country: {
-                required: 'Country is required',
+            username: {
+                required: 'Username is required',
             },
             phone: {
-                required: 'Phone is required',
+                required: 'Phone Number is required',
             },
         },
     });

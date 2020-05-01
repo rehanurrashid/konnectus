@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\ServiceRating;
+use App\ServicePhoto;
 use App\User; 
 use App\Category;
+use App\Language;
 
 class Service extends Model
 {
 	use SoftDeletes;
 
+    protected $fillable = ['user_id','slug', 'category_id','name','tags','phone','address','longitude','latitude','from_time','to_time','country_code'];
+    
 	protected $guard = [];
 
 	public function user(){
@@ -45,6 +49,12 @@ class Service extends Model
 
     public function rating()
     {
-        return $this->hasMany(ServiceRating::class, 'service_id','id');
+        return $this->hasMany(ServiceRating::class, 'service_id','id')->with('user');
+    }
+    public function photos(){
+        return $this->hasMany(ServicePhoto::class);
+    }
+    public function languages(){
+        return $this->belongsToMany(Language::class, 'place_languages', 'service_id', 'language_id');
     }
 }

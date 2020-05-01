@@ -5,9 +5,11 @@ namespace App\Http\Controllers\API;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\PlacePhoto;
 use Validator;
 use App\Place;
 use App\PlaceRating;
+use DB;
 
 class PlaceController extends Controller
 {
@@ -15,25 +17,17 @@ class PlaceController extends Controller
     { 
         $validator = Validator::make($request->all(), [ 
             'name' => 'required', 
-            'category_id' => 'required', 
+            'category_id' => 'required',
+            'language_id' => 'required',
             'phone' => 'required', 
             'longitude' => 'required',
             'latitude' => 'required',
             'image' => 'required',
+            'from_time' => 'required',
+            'to_time' => 'required',
         ]);
         if ($validator->fails()) { 
                 return response()->json(['error'=>$validator->errors()], 401);            
-        }
-
-        $filename ='';
-
-        if ($request['image']){
-            $originalImage= $request->file('image');
-            $request['picture'] = $request->file('image')->store('public/storage');
-            $request['picture'] = Storage::url($request['picture']);
-            $request['picture'] = asset($request['picture']);
-            $filename = $request->file('image')->hashName();
-
         }
 
         $place = new Place;
@@ -42,13 +36,29 @@ class PlaceController extends Controller
         $place->category_id = $request->category_id;
         $place->name = $request->name;
         $place->setAttribute('slug', $request->name);
-        $place->address = $request->address;
-        $place->image = $request['picture'];
+        $place->tags = $request->tags;
         $place->phone = $request->phone;
+        $place->address = $request->address;
         $place->longitude = $request->longitude;
         $place->latitude = $request->latitude;
-        $place->tags = $request->tags;
+        $place->from_time = $request->from_time;
+        $place->to_time = $request->to_time;
+        $place->country_code = $request->country_code;
         $place->save();
+
+        foreach ($request->image as $file) {
+            
+            $request['picture'] = $file->store('public/storage');
+            $request['picture'] = Storage::url($request['picture']);
+            $request['picture'] = asset($request['picture']);
+
+            PlacePhoto::create([
+                'place_id' => $place->id,
+                'photo' => $request['picture']
+            ]);
+        }
+
+        $place->languages()->attach($request->language_id);
 
         if($place){
         	return response()->json(['success'=>'Place Added Successfully!'], 200); 
@@ -61,16 +71,24 @@ class PlaceController extends Controller
 
     public function show($id){
 
-        $place = Place::with(['category'])->withCount(['rating'])->where('id',$id)->first();
-        $rate = $place->rating()->avg('rate');
-        $rate = number_format((float)$rate, 1, '.', '');
-        $place->avg_rate = $rate;
-        return response()->json(['success'=>$place], 200); 
+        $place = Place::with(['category','languages','photos','rating'])->withCount(['rating'])->where('id',$id)->first();
+        // $place['photos'] = PlacePhoto::where('place_id',$id)->get();
+        if($place != null){
+
+            $rate = $place->rating()->avg('rate');
+            $rate = number_format((float)$rate, 1, '.', '');
+            $place->avg_rate = $rate;
+            return response()->json(['success'=>$place], 200); 
+        }
+        else{
+            return response()->json(['error'=> ''], 200); 
+        }
+        
     }
 
     public function show_all(){
 
-        $places = Place::with(['category'])->withCount(['rating'])->get();
+        $places = Place::with(['category','photos'])->withCount(['rating'])->where('status',1)->get();
 
         foreach ($places as $place) {
 
@@ -111,7 +129,7 @@ class PlaceController extends Controller
 
     public function show_rating($id){
 
-        $place_rating = Place::with('rating')->where('id',$id)->first();
+        $place_rating = Place::with('rating')->where('id',$id)->where('status',1)->first();
 
         if(!empty($place_rating->rating[0])){
             return response()->json(['success'=>$place_rating], 200); 
@@ -121,5 +139,104 @@ class PlaceController extends Controller
         }
     }
 
+    public function search(Request $request){
+
+        if($request->keyword == '' && $request->slug == ''){
+            return response(['error' => 'Atleast one word(keyword/slug) is required for searching...!'], 200);
+        }
+
+        if(!empty($request->slug)){
+
+            $place = Place::with(['category','languages','photos','rating'])->withCount(['rating'])->where('slug', $request->slug)->first();
+            
+
+            if(!empty($place)){
+
+                $place['latest_places'] = Place::orderBy('id', 'desc')->take(5)->get();
+
+                $place['related_places'] = Place::orderBy('id', 'desc')->take(5)->get();
+
+                $search_terms = explode(",", $place->tags);
+    
+                $place['related_places'] = Place::where(function ($q) use ($search_terms) {
+                  foreach ($search_terms as $value) {
+                    $q->orWhere('tags', 'like', '%'.$value.'%');
+                  }
+                })->with(['rating'])->get();
+
+                if(!empty($place['related_places'])){
+
+                    foreach ($place['related_places'] as $row) {
+
+                        $rate = $row->rating()->avg('rate');
+                        $rate = number_format((float)$rate, 1, '.', '');
+                        $row->avg_rate = $rate;
+
+                    }
+                }
+                
+                // auth()->user()->places()->attach($place->id);
+
+                $rate = $place->rating()->avg('rate');
+                $rate = number_format((float)$rate, 1, '.', '');
+                $place->avg_rate = $rate;
+
+                return response(['product' => $place], 200);
+            }
+            else{
+                // $place['product'] = 'No Product Found!';
+                // $place['latest_places'] = Product::orderBy('id', 'desc')->take(5)->get();
+                return response(['product' => []], 200);
+            }
+        }
+        else if(!empty($request->keyword)){
+
+            $searchValues = preg_split('/\s /', $request->keyword, -1, PREG_SPLIT_NO_EMPTY);
+            $search_terms = explode(" ", $searchValues[0]);
+            // $places = Searchy::places('title')->query($searchValues[0])->get();
+            $places = Place::where(function ($q) use ($search_terms) {
+              foreach ($search_terms as $value) {
+                $q->orWhere('name', 'like', '%'.$value.'%')
+                    ->orWhere('tags', 'like', '%'.$value.'%');
+              }
+            })->get();
+
+            $props = ['name'];
+
+            $places = $places->sortByDesc(function($i, $k) use ($search_terms, $props) {
+                // The bigger the weight, the higher the record
+                $weight = 0;
+                // Iterate through search terms
+                foreach($search_terms as $searchTerm) {
+                    // Iterate through places (address1, address2...)
+                    foreach($props as $prop) {
+                        // Use strpos instead of %value% (cause php)
+                        if(strpos($i->{$prop}, $searchTerm) !== false)
+                            $weight += 1; // Increase weight if the search term is found
+                    }
+                }
+
+                return $weight;
+                });
+
+                foreach ($places as $row) {
+
+                    $rate = $row->rating()->avg('rate');
+                    $rate = number_format((float)$rate, 1, '.', '');
+                    $row->avg_rate = $rate;
+
+                }
+
+                $places = $places->values()->all();
+
+                if(!empty($places[0])){
+
+                    return response(['places' => $places], 200);
+                }
+                else{
+                    return response(['places' => []], 200);
+                }
+            }
+    }
 }
 

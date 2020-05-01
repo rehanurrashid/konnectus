@@ -24,8 +24,15 @@ class StorePlace extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'bail|required',
-            'description' => 'bail|required',
+            'name' => 'bail|required',
+            'address' => 'bail|required',
+            'longitude' => 'bail|required',
+            'latitude' => 'bail|required',
+            'phone' => 'bail|required',
+            'user_id' => 'bail|required',
+            'category_id' => 'bail|required',
+            'from_time' => 'bail|required',
+            'to_time' => 'bail|required',
         ];
     }
 }

@@ -14,6 +14,7 @@
         "laravel/passport": "^8.4",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^6.1",
+        "twilio/sdk": "^6.3",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {

@@ -23,7 +23,15 @@
             <a href="{{ route('services.index') }}" class="nav-link {{Request::is(['services','services/*']) ? 'active' : ''}}">
                 <i class="fa fa-archive" aria-hidden="true"></i>
                 <span>
-                    Services Management
+                    All Services Management
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('pending_services.index') }}" class="nav-link {{Request::is(['pending_services','pending_services/*']) ? 'active' : ''}}">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span>
+                    Pending Services Management
                 </span>
             </a>
         </li>
@@ -31,7 +39,15 @@
             <a href="{{ route('places.index') }}" class="nav-link {{Request::is(['places','places/*']) ? 'active' : ''}}">
                 <i class="fa fa-map-marker" aria-hidden="true"></i>
                 <span>
-                    Places Management
+                    All Places Management
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('pending_places.index') }}" class="nav-link {{Request::is(['pending_places','pending_places/*']) ? 'active' : ''}}">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span>
+                    Pending Places Management
                 </span>
             </a>
         </li>
@@ -40,6 +56,14 @@
                 <i class="fa fa-list-alt" aria-hidden="true"></i>
                 <span>
                     Category Management
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('languages.index') }}" class="nav-link {{Request::is(['languages','languages/*']) ? 'active' : ''}}">
+                <i class="fa fa-list-alt" aria-hidden="true"></i>
+                <span>
+                    Languages Management
                 </span>
             </a>
         </li>

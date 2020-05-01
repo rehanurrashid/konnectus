@@ -5,13 +5,17 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\PlacePhoto;
 use App\PlaceRating;
 use App\User; 
 use App\Category;
+use App\Language;
 
 class Place extends Model
 {
 	use SoftDeletes;
+
+    protected $fillable = ['user_id', 'slug', 'category_id','name','tags','phone','address','longitude','latitude','from_time','to_time','country_code'];
 
 	protected $guard = [];
 
@@ -45,6 +49,14 @@ class Place extends Model
 
     public function rating()
     {
-        return $this->hasMany(PlaceRating::class, 'place_id','id');
+        return $this->hasMany(PlaceRating::class, 'place_id','id')->with('user');
+    }
+
+    public function languages(){
+        return $this->belongsToMany(Language::class, 'place_languages', 'place_id', 'language_id');
+    }
+
+    public function photos(){
+        return $this->hasMany(PlacePhoto::class);
     }
 }

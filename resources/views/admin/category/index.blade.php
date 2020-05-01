@@ -93,7 +93,7 @@
                                             <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Parent ID</th>
+                                                <th>Parent Name</th>
                                                 <th>Category</th>
                                                 <th>Image</th>
                                                 <th>Type</th>
@@ -113,7 +113,7 @@
                                                     ajax: '{!! route('categories.index') !!}',
                                                     columns: [
                                                         { data: 'id', name: 'id' },
-                                                        { data: 'parent_id', name: 'parent_id' },
+                                                        { data: 'parent_name', name: 'parent_name' },
                                                         { data: 'name', name: 'name' },
                                                         { data: 'image', name: 'image' },
                                                         { data: 'type', name: 'type' },

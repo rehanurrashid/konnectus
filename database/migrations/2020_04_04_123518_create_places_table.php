@@ -26,6 +26,8 @@ class CreatePlacesTable extends Migration
             $table->string('latitude',255);
             $table->boolean('status',1)->default(0);
             $table->text('tags')->nullable();
+            $table->string('from_time',255);
+            $table->string('to_time',255);
             $table->timestamps();
             $table->softDeletes();
         });

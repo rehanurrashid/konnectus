@@ -68,6 +68,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                    <a class="btn btn-dark w-25" href="{{ route('places.create') }}">Add New</a>
+                                </div>
+                            </div>
+                        </div>
                         <br>
                         <div class="row">
                             <div class="col-lg-12">
@@ -86,10 +93,13 @@
                                             <thead>
                                             <tr>
                                                 <th>ID</th>
+                                                <th >Get Direction</th>
                                                 <th>User Name</th>
                                                 <th>Location Name</th>
                                                 <th>Phone</th>
                                                 <th>Status</th>
+                                                <th>Rate</th>
+                                                <th>Total Reviews</th>
                                                 <th>Tags</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -107,10 +117,13 @@
                                                     ajax: '{!! route('places.index') !!}',
                                                     columns: [
                                                         { data: 'id', name: 'id' },
+                                                        { data: 'direction', name: 'direction' },
                                                         { data: 'user_name', name: 'user_name' },
                                                         { data: 'name', name: 'name' },
                                                         { data: 'phone', name: 'phone' },
                                                         { data: 'status', name: 'status' },
+                                                        { data: 'rate', name: 'rate' },
+                                                        { data: 'reviews', name: 'reviews' },
                                                         { data: 'tags', name: 'tags' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],

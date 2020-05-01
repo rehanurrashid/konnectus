@@ -4,7 +4,7 @@
         <a href="{{ route('services.edit', [$service->id]) }}" title="Edit Service"><i class="icon-pencil5 mr-1 icon-1x"></i></a>
         <a href="javascript:sdelete('admin/services/{{$service->id}}')" title="Suspend Service" class="delete-row delete-color" data-id="{{ $service->id }}"><i class="icon-bin mr-1 icon-1x" style="color:red;"></i></a>
         <a href="{{ route('services.show', [$service->id]) }}" title="View Service" class="delete-row delete-color" data-id="{{ $service->id }}">
-            <img src="{{asset('images/eye.png')}}" width="25px">
+            <i class="fa fa-eye text-info" aria-hidden="true"></i>
         </a>
     </div>
     @else

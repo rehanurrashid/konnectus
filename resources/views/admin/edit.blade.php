@@ -86,9 +86,9 @@
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('email','Email') }}<span style="color:red;">*</span>
-                                                        {{ Form::email('email',old('email'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Email Address' , 'data-validate-field' => 'email')) }}
-                                                        {!! $errors->first('email', '<label id="email-error" class="error" for="email">:message</label>') !!}
+                                                        {{ Form::label('username','Username') }}<span style="color:red;">*</span>
+                                                        {{ Form::text('username',old('username'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Username' , 'data-validate-field' => 'username')) }}
+                                                        {!! $errors->first('username', '<label id="username-error" class="error" for="username">:message</label>') !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -137,7 +137,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('photo','Location Image') }}
+                                                        {{ Form::label('photo','Image') }}
                                                         <span >(Optional)</span>
                                                         {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
@@ -147,6 +147,13 @@
                                                         <p id="error2" style="display:none; color:#B81111;">
                                                         Maximum File Size Limit is 5MB.
                                                         </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('email','Email') }}<span style="color:red;">*</span>
+                                                        {{ Form::email('email',old('email'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Email Address' , 'data-validate-field' => 'email')) }}
+                                                        {!! $errors->first('email', '<label id="email-error" class="error" for="email">:message</label>') !!}
                                                     </div>
                                                 </div>
                                             </div>

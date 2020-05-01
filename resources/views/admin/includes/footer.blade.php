@@ -8,7 +8,7 @@
 
     <div class="navbar-collapse collapse" id="navbar-footer">
 					<span class="navbar-text">
-						&copy; 2020. <a href="#">TalkMaze</a> by <a href="#" target="_blank">Oranje Click</a>
+						&copy; 2020. <a href="#">KonnectUs</a> by <a href="#" target="_blank">Oranje Click</a>
 					</span>
     </div>
 </div>

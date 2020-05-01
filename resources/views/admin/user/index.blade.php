@@ -94,7 +94,10 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Name</th>
+                                                <th>Username</th>
                                                 <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Verification</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
@@ -112,7 +115,10 @@
                                                     columns: [
                                                         { data: 'id', name: 'id' },
                                                         { data: 'name', name: 'name' },
+                                                        { data: 'username', name: 'username' },
                                                         { data: 'email', name: 'email' },
+                                                        { data: 'phone', name: 'phone' },
+                                                        { data: 'verification', name: 'verification' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],
                                                     buttons: {

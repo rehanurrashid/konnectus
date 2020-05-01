@@ -31,6 +31,20 @@ class AdminController extends Controller
 
      public function update(StoreUser $request, $id)
     {
+        // $validator = Validator::make($request->all(), [ 
+        //     'name' => 'required', 
+        //     'username' => 'required|unique:users', 
+        //     'email' => 'required|email:rfc|unique:users,username,'.auth()->user()->id.',id', 
+        //     'password' => 'required', 
+        //     'phone' => 'required|unique:user_profiles,phone,'.auth()->user()->id.',user_id',  
+        // ]);
+        // if ($validator->fails()) { 
+        //     return redirect()
+        //                 ->back()
+        //                 ->withErrors($validator)
+        //                 ->withInput();            
+        // }
+
         $password = $request->password;
         $hash_password = Hash::make($password);
 
@@ -50,6 +64,7 @@ class AdminController extends Controller
         } 
         
         $user->name = $request->name;
+        $user->username = $request->username;
         $user->email = $request->email;
         $user->password = $hash_password;
         $user->role = 'admin';

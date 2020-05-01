@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller; 
 use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Str;
+use Twilio\Rest\Client;
 use App\UserProfile;
 use Validator;
 use App\User; 
@@ -22,10 +24,30 @@ public $successStatus = 200;
      */ 
     public function login(Request $request)
     {
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password
-        ];
+        
+        if(filter_var($request->email, FILTER_VALIDATE_EMAIL)){
+            $credentials = [
+                'email' => $request->email
+            ];
+        }else{
+            $credentials = [
+                'username' => $request->email
+            ];
+        }
+        if(isset($request->password)){
+            $credentials['password'] = $request->password;
+        }else{
+            $credentials['verification_code'] = $request->verification_code;
+            $user = User::where($credentials)->first();
+            if($user){
+                Auth::loginUsingId($user->id);
+                $token = auth()->user()->createToken('Web')->accessToken;
+                return response()->json(['token'=>$token],200);
+            }else{
+                return response()->json(['message'=>'Not found!'],200);
+            }
+            
+        }
 
         if (auth()->attempt($credentials)) {
 
@@ -34,8 +56,32 @@ public $successStatus = 200;
                 return response()->json(['message'=>'User can not Login'], 401);
             }
             $token = auth()->user()->createToken('Web')->accessToken;
+            
+            if(!auth()->user()->phone_verified_at){
 
-            return response()->json(['token' => $token,'user'=> Auth::user()], 200);
+                $account_sid = 'ACf17f35f8d2da099186e8e88f3772420a';
+                $auth_token = 'aacbe785c984a7deba087d6b764215ef';
+                // In production, these should be environment variables. E.g.:
+                // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
+        
+                // A Twilio number you own with SMS capabilities
+                $twilio_number = "+12242525454";
+                $verification_code = rand(100000, 999999);
+        
+                $client = new Client($account_sid, $auth_token);
+                $client->messages->create(
+    
+                    "+".auth()->user()->profile->phone,
+                    array(
+                        'from' => $twilio_number,
+                        'body' => 'Verification Code:'.$verification_code,
+                    )
+                );
+                auth()->user()->update(['verification_code'=>$verification_code]);
+                return response()->json(['token' => $token,'message'=> 'verification SMS sent','phone'=> "+".auth()->user()->profile->phone], 200);
+            }
+
+            return response()->json(['token' => $token,'user'=> Auth::user(),'message'=>'success'], 200);
         } else {
             return response()->json(['error' => 'Login Credentials where wrong '], 401);
         }
@@ -49,26 +95,54 @@ public $successStatus = 200;
     { 
         $validator = Validator::make($request->all(), [ 
             'name' => 'required', 
-            'email' => 'required|email:rfc|unique:users', 
+            'username' => 'required|unique:users', 
             'password' => 'required', 
             'phone' => 'required|unique:user_profiles', 
+            'country' => 'required', 
+            'country_code' => 'required', 
         ]);
         if ($validator->fails()) { 
                     return response()->json(['error'=>$validator->errors()], 401);            
         }
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role'=>'customer',
-        ]);
+        /* Get credentials from .env */
+
+        $account_sid = 'ACf17f35f8d2da099186e8e88f3772420a';
+        $auth_token = 'aacbe785c984a7deba087d6b764215ef';
+        // In production, these should be environment variables. E.g.:
+        // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
+
+        // A Twilio number you own with SMS capabilities
+        $twilio_number = "+12242525454";
+        $verification_code = rand(100000, 999999);
+
+        $client = new Client($account_sid, $auth_token);
+        $client->messages->create(
+            // Where to send a text message (your cell phone?)
+            "+".$request->phone,
+            array(
+                'from' => $twilio_number,
+                'body' => 'Verification Code:'.$verification_code,
+            )
+        );
+
+        $user = new User;
+
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->verification_code = $verification_code;
+        $user->role = 'customer';
+
+        $user->save();
 
         $profile = new UserProfile([
                 'user_id' => $user->id,
                 // 'address'  => $request->address,
                 // 'city'  => $request->city,
-                // 'country'   => $request->country,
+                'country'   => $request->country,
+                'country_code'   => $request->country_code,
                 'phone' =>  $request->phone,
                 // 'photo' => $request->photo,
             ]);
@@ -80,7 +154,10 @@ public $successStatus = 200;
         $user = [
             'id' => $user->id,
             'name' => $user->name,
+            'username' => $user->username,
             'email' => $user->email,
+            'country' => $profile->country,
+            'country_code' => $profile->country_code,
             'phone' => $profile->phone,
             'role' => 'customer',
             'status_id' => '1',
@@ -102,52 +179,74 @@ public $successStatus = 200;
     }
 
     public function update(Request $request){
-        
-         $validator = Validator::make($request->all(), [ 
-            'name' => 'required', 
-            'phone' => 'required|unique:user_profiles,phone,'.auth()->user()->id.',user_id',
-            'gender' => 'required',
-            'address' => 'required',
-            'longitude' => 'required',
-            'latitude' => 'required',
-            'dob' => 'required',
-        ]);
-        if ($validator->fails()) { 
-                    return response()->json(['error'=>$validator->errors()], 401);            
-        }
+        if(!$request->name){
+            if ($request['image']){
+                $originalImage= $request->file('image');
+                $request['picture'] = $request->file('image')->store('public/storage');
+                $request['picture'] = Storage::url($request['picture']);
+                $request['picture'] = asset($request['picture']);
+                $filename = $request->file('image')->hashName();
+            }
+            $profile = DB::table('user_profiles')
+                  ->where('user_id', auth()->user()->id)
+                  ->update([
+                    'photo' => $filename,
+                ]);
+    
+            if($profile){
+                return response()->json(['success'=>'User profile updated successfully'], $this->successStatus);
+            }
+            else{
+                return response()->json(['success'=>'Unable to update user profile'], 401);
+            }
+        }else{
 
-        $filename ='';
-
-        if ($request['image']){
-            $originalImage= $request->file('image');
-            $request['picture'] = $request->file('image')->store('public/storage');
-            $request['picture'] = Storage::url($request['picture']);
-            $request['picture'] = asset($request['picture']);
-            $filename = $request->file('image')->hashName();
-
-        }
-
-        $user = DB::table('users')
-              ->where('id', auth()->user()->id)
-              ->update(['name' => $request->name]);
-
-        $profile = DB::table('user_profiles')
-              ->where('user_id', auth()->user()->id)
-              ->update([
-                'phone' => $request->phone, 
-                'gender' => $request->gender,
-                'photo' => $filename,
-                'address' => $request->address,
-                'longitude' => $request->longitude,
-                'latitude' => $request->latitude, 
-                'dob' => $request->dob, 
+            $validator = Validator::make($request->all(), [ 
+                'name' => 'required', 
+                'phone' => 'required|unique:user_profiles,phone,'.auth()->user()->id.',user_id',
+                'gender' => 'required',
+                'address' => 'required',
+                'longitude' => 'required',
+                'latitude' => 'required',
+                'dob' => 'required',
             ]);
-
-        if($profile){
-            return response()->json(['success'=>'User profile updated successfully'], $this->successStatus);
-        }
-        else{
-            return response()->json(['success'=>'Unable to update user profile'], 401);
+            if ($validator->fails()) { 
+                        return response()->json(['error'=>$validator->errors()], 401);            
+            }
+    
+            $filename ='';
+    
+            if ($request['image']){
+                $originalImage= $request->file('image');
+                $request['picture'] = $request->file('image')->store('public/storage');
+                $request['picture'] = Storage::url($request['picture']);
+                $request['picture'] = asset($request['picture']);
+                $filename = $request->file('image')->hashName();
+    
+            }
+    
+            $user = DB::table('users')
+                  ->where('id', auth()->user()->id)
+                  ->update(['name' => $request->name]);
+    
+            $profile = DB::table('user_profiles')
+                  ->where('user_id', auth()->user()->id)
+                  ->update([
+                    'phone' => $request->phone, 
+                    'gender' => $request->gender,
+                    'photo' => $filename,
+                    'address' => $request->address,
+                    'longitude' => $request->longitude,
+                    'latitude' => $request->latitude, 
+                    'dob' => $request->dob, 
+                ]);
+    
+            if($profile){
+                return response()->json(['success'=>'User profile updated successfully'], $this->successStatus);
+            }
+            else{
+                return response()->json(['success'=>'Unable to update user profile'], 401);
+            }
         }
 
     }
@@ -159,28 +258,45 @@ public $successStatus = 200;
      */ 
     public function details() 
     { 
-        $user= Auth::user();
-        $profile = UserProfile::where('user_id', auth()->user()->id)->first();
+        $user= User::whereId(auth()->id())->with(['service_reviews','place_reviews','total_places','total_services'])->withCount(['service_reviews','place_reviews'])->first();
+        $profile = UserProfile::where('user_id', $user->id)->first();
+
+        foreach ($user->total_places as $place) {
+
+            $user->otherRateCount += $place->rating_count;
+
+        }
+
+        foreach ($user->total_services as $service) {
+
+            $user->otherRateCount += $place->rating_count;
+
+        }
 
         $user = [
             'name'      =>  $user->name,
+            'username'      =>  $user->username,
             'email'     => $user->email,
             'email_verified_at'  =>  $user->email_verified_at,
             'role'      =>  $user->role,
             'status_id' =>  $user->status_id,
-            'address'      =>  $profile->address,
-            'longitude'      =>  $profile->longitude,
-            'latitude'      =>  $profile->latitude,
-            'city'      =>  $profile->city,
-            'country'      =>  $profile->country,
-            'photo'      =>  $profile->photo,
-            'phone'      =>  $profile->phone,
-            'gender'      =>  $profile->gender,
-            'dob'      =>  $profile->dob,
+            'address'      =>  $user->profile->address,
+            'longitude'      =>  $user->profile->longitude,
+            'latitude'      =>  $user->profile->latitude,
+            'city'      =>  $user->profile->city,
+            'country'      =>  $user->profile->country,
+            'country_code'      =>  $user->profile->country_code,
+            'photo'      =>  $user->profile->photo,
+            'phone'      =>  $user->profile->phone,
+            'gender'      =>  $user->profile->gender,
+            'dob'      =>  $user->profile->dob,
+            'otherRateCount' => $user->otherRateCount,
+            'myReviewsCount' => $user->myReviewsCount,
             'created_at'      =>  $user->created_at,
-            'updated_at'      =>  $profile->updated_at,
+            'updated_at'      =>  $user->profile->updated_at,
             'deleted_at'      =>  $user->deleted_at,
         ];
+
         return response()->json(['user' => $user], $this-> successStatus); 
     } 
 
@@ -209,4 +325,85 @@ public $successStatus = 200;
         }
 
     }
+
+    public function phone_verify($code){
+
+        $user = User::whereId(auth()->id())->where('verification_code',$code)->first();
+
+        if(!empty($user)){
+            auth()->user()->update(['phone_verified_at' => date("Y-m-d H:i:s"),'verification_code'=>'']);
+
+            return response(['user' => $user,'message' => 'success'], 200);
+        }
+        else{
+            return response(['user' => $user,'message' => 'Invalid Code!'], 200);
+        }
+    }
+
+    public function resend(){
+
+        $user = User::select('id','verification_code')->with('profile')->where('id', auth()->user()->id)->where('verification_code', '<>', Null)->first();
+
+        if(!empty($user)){
+
+             /* Get credentials from .env */
+
+            $account_sid = 'ACf17f35f8d2da099186e8e88f3772420a';
+            $auth_token = 'aacbe785c984a7deba087d6b764215ef';
+            // In production, these should be environment variables. E.g.:
+            // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
+
+            // A Twilio number you own with SMS capabilities
+            $twilio_number = "+12242525454";
+            $verification_code = $user->verification_code;
+
+            $client = new Client($account_sid, $auth_token);
+            $client->messages->create(
+                // Where to send a text message (your cell phone?)
+                $user->profile->phone,
+                array(
+                    'from' => $twilio_number,
+                    'body' => 'Verification Code:'.$verification_code,
+                )
+            );
+
+            return response(['user' => $user,'message' => 'code sent'], 200);
+        }
+        else{
+            return response(['message' => 'Not Authorized!'], 200);
+        }
+    }
+    
+    public function send_reset_password(Request $request){
+        if(filter_var($request->email, FILTER_VALIDATE_EMAIL)){
+            $user = User::where('email',$request->email)->first();
+        }else{
+            $user = User::where('username',$request->email)->first();
+        }
+        $account_sid = 'ACf17f35f8d2da099186e8e88f3772420a';
+        $auth_token = 'aacbe785c984a7deba087d6b764215ef';
+                // In production, these should be environment variables. E.g.:
+                // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
+        
+                // A Twilio number you own with SMS capabilities
+        $twilio_number = "+12242525454";
+        $verification_code = rand(100000, 999999);
+        
+        $client = new Client($account_sid, $auth_token);
+        $client->messages->create(
+            "+".$user->profile->phone,
+            array(
+                'from' => $twilio_number,
+                'body' => 'Verification Code:'.$verification_code,
+            )
+        );
+        $user->update(['verification_code'=>$verification_code,'phone_verified_at'=>null]);
+        return response()->json(['message'=>'Code Successfully sent'],200);
+    }
+    
+    public function restpass(Request $request){
+        auth()->user()->update(['password'=>Hash::make($request->password)]);
+        return response()->json(['message'=>'success'],200);
+    }
+
 }

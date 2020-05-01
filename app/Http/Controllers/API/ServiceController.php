@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\ServicePhoto;
 use Validator;
 use App\Service;
 use App\ServiceRating;
@@ -20,35 +21,42 @@ class ServiceController extends Controller
             'longitude' => 'required',
             'latitude' => 'required',
             'image' => 'required',
+            'from_time' => 'required',
+            'to_time' => 'required',
         ]);
         if ($validator->fails()) { 
                 return response()->json(['error'=>$validator->errors()], 401);            
         }
 
-        $filename ='';
-
-        if ($request['image']){
-            $originalImage= $request->file('image');
-            $request['picture'] = $request->file('image')->store('public/storage');
-            $request['picture'] = Storage::url($request['picture']);
-            $request['picture'] = asset($request['picture']);
-            $filename = $request->file('image')->hashName();
-
-        }
-
-        $service = new Service;
+         $service = new Service;
 
         $service->user_id = auth()->user()->id;
         $service->category_id = $request->category_id;
         $service->name = $request->name;
         $service->setAttribute('slug', $request->name);
-        $service->address = $request->address;
-        $service->image = $request['picture'];
+        $service->tags = $request->tags;
         $service->phone = $request->phone;
+        $service->address = $request->address;
         $service->longitude = $request->longitude;
         $service->latitude = $request->latitude;
-        $service->tags = $request->tags;
+        $service->from_time = $request->from_time;
+        $service->to_time = $request->to_time;
+        $service->country_code = $request->country_code;
         $service->save();
+
+        foreach ($request->image as $file) {
+            
+            $request['picture'] = $file->store('public/storage');
+            $request['picture'] = Storage::url($request['picture']);
+            $request['picture'] = asset($request['picture']);
+
+            ServicePhoto::create([
+                'service_id' => $service->id,
+                'photo' => $request['picture']
+            ]);
+        }
+
+        $service->languages()->attach($request->language_id);
 
         if($service){
             return response()->json(['success'=>'Service Added Successfully!'], 200); 
@@ -61,7 +69,7 @@ class ServiceController extends Controller
 
     public function show($id){
 
-        $service = Service::with(['category'])->withCount(['rating'])->where('id',$id)->first();
+        $service = Service::with(['category','photos','languages','rating'])->withCount(['rating'])->where('id',$id)->first();
         $rate = $service->rating()->avg('rate');
         $rate = number_format((float)$rate, 1, '.', '');
         $service->avg_rate = $rate;
@@ -70,7 +78,7 @@ class ServiceController extends Controller
 
     public function show_all(){
 
-        $services = Service::with(['category'])->withCount(['rating'])->get();
+        $services = Service::with(['category','languages','photos'])->withCount(['rating'])->where('status',1)->get();
 
         foreach ($services as $service) {
 

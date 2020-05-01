@@ -21,6 +21,7 @@ class CreateUserProfilesTable extends Migration
             $table->string('longitude')->nullable();
             $table->string('city')->nullable();
             $table->string('country')->nullable();
+            $table->string('country_code')->nullable();
             $table->string('photo', 255)->nullable();
             $table->string('phone', 255)->nullable();
             $table->string('gender')->nullable();

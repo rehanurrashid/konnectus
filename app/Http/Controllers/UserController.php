@@ -23,17 +23,28 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, User $user)
     {
         if($request->ajax()){
-            $user = User::select(['id', 'name', 'email', 'password', 'created_at', 'updated_at']);
-
+            $user = $user->newQuery()->with(['profile'])->where('role','customer');
+            // dd($user);
             return Datatables::of($user)
                 ->addColumn('action', function ($user) {
                     return view('admin.actions.actions_user',compact('user'));
                     })
+                ->addColumn('phone', function ($user) {
+                    return $user->profile->phone;
+                    })
+                ->addColumn('verification', function ($user) {
+                        if($user->phone_verified_at != Null){
+                            return '<b>Verified at: </b>'.$user->phone_verified_at;
+                        }else{
+                            return '<b>Not Verified Yet!</b>';
+                        }
+                    })
                 ->editColumn('id', 'ID: {{$id}}')
                 ->removeColumn('password')
+                ->rawColumns(['verification'])
                 ->make(true);
         }
        return view('admin.user.index');
@@ -73,6 +84,7 @@ class UserController extends Controller
         
         $user = new User;
         $user->name = $request->name;
+        $user->username = $request->username;
         $user->email = $request->email;
         $user->password = $password;
         $user->role = 'customer';
@@ -87,7 +99,9 @@ class UserController extends Controller
                 'city'  => $request->city,
                 'country'   => $request->country,
                 'phone' =>  $request->phone,
-                'image' => $filename,
+                'photo' => $filename,
+                'dob' => $request->dob,
+                'gender' => $request->gender,
             ]);
 
             $profile = $user->profile()->save($profile);
@@ -107,7 +121,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return view('admin.user.show');
+        $user = User::with(['profile'])->where('id',$id)->first();
+
+        return view('admin.user.show', compact('user'));
     }
 
     /**
@@ -151,9 +167,10 @@ class UserController extends Controller
         } 
         
         $user->name = $request->name;
+        $user->username = $request->username;
         $user->email = $request->email;
         $user->password = $hash_password;
-        $user->role = $request->role;
+        $user->role = 'customer';
         $user->save();
 
         Mail::to($user)->send(new PasswordSentEmail($password));
@@ -166,7 +183,9 @@ class UserController extends Controller
                 $profile->city      = $request->city;
                 $profile->country   = $request->country;
                 $profile->phone     = $request->phone;
-                $profile->image     = $filename;
+                $profile->photo     = $filename;
+                $profile->dob     =  $request->dob;
+                $profile->gender     =  $request->gender;
                 $profile->save();
 
             // $profile = $user->profile()->save($profile);

@@ -5,7 +5,7 @@
  *  Place here all your custom js. Make sure it's loaded after app.js
  *
  * ---------------------------------------------------------------------------- */
-const myurl = "http://127.0.0.1:8000";
+const myurl = "http://oranje-tech.com/demo/konnectus/";
 function load(method,url,responseId) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -129,7 +129,7 @@ function sdelete(url) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (data) {
-            $('#utable').dataTable().fnDraw();
+            $('#rtable').dataTable().fnDraw();
             new PNotify({
                 title: 'Item Deleted',
                 text: 'Item Deleted Successfully',
@@ -152,7 +152,7 @@ function restore(url){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (data) {
-            $('#utable').dataTable().fnDraw();
+            $('#rtable').dataTable().fnDraw();
             new PNotify({
                 title: 'Item Restored',
                 text: 'Item Restored Successfully',
@@ -174,7 +174,7 @@ function permanent(url){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (data) {
-            $('#utable').dataTable().fnDraw();
+            $('#rtable').dataTable().fnDraw();
             new PNotify({
                 title: 'Item Permanently Deleted',
                 text: 'Item Deleted Successfully',

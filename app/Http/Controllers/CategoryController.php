@@ -20,11 +20,20 @@ class CategoryController extends Controller
     {
         if($request->ajax()){
 
-            $category = Category::select(['id','parent_id', 'name','image','type','created_at', 'updated_at']);
+            $category = Category::get();
             // dd($category);
             return Datatables::of($category)
                 ->addColumn('action', function($category) {
                     return view('admin.actions.actions_category',compact('category'));
+                    })
+                ->addColumn('parent_name', function($category) {
+                        if($category->parent_id == Null){
+                            return 'No Parent';
+                        }
+                        else{
+                            $category = Category::where('id', $category->parent_id)->select('name')->first();
+                            return $category->name;
+                        }
                     })
                 ->editColumn('id', 'ID: {{$id}}')
                 ->make(true);

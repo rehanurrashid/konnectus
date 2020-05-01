@@ -27,13 +27,16 @@ Route::post('admin/logout', 'Auth\LoginController@logout')->name('admin.logout')
 Route::prefix('admin')->middleware(['auth:web','check.role:admin'])->group(function () {
 
 	Route::get('dashboard','AdminController@index')->name('admin.dashboard');
+  
   	Route::get('acount-settings/{id}/edit','AdminController@edit')->name('admin.account.edit');
   	Route::put('acount-settings/{id}','AdminController@update')->name('admin.account.update');
 
-
   	Route::resource('users', 'UserController');
+    Route::resource('languages', 'LanguageController');
   	Route::resource('categories','CategoryController');
   	Route::post('dependent/category','CategoryController@fetch')->name('dynamicdependent.fetch');
   	Route::resource('services','ServiceController');
   	Route::resource('places','PlaceController');
+  	Route::resource('pending_places','PendingPlaceController');
+  	Route::resource('pending_services','PendingServiceController');
 });

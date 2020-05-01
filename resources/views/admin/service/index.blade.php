@@ -68,6 +68,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                    <a class="btn btn-dark w-25" href="{{ route('services.create') }}">Add New</a>
+                                </div>
+                            </div>
+                        </div>
                         <br>
                         <div class="row">
                             <div class="col-lg-12">
@@ -90,6 +97,8 @@
                                                 <th>Location Name</th>
                                                 <th>Phone</th>
                                                 <th>Status</th>
+                                                <th>Rate</th>
+                                                <th>Total Reviews</th>
                                                 <th>Tags</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -111,6 +120,8 @@
                                                         { data: 'name', name: 'name' },
                                                         { data: 'phone', name: 'phone' },
                                                         { data: 'status', name: 'status' },
+                                                        { data: 'rate', name: 'rate' },
+                                                        { data: 'reviews', name: 'reviews' },
                                                         { data: 'tags', name: 'tags' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],

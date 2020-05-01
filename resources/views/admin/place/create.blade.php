@@ -93,9 +93,11 @@
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        {{ Form::label('photo','Location Image') }}
+                                                        {{ Form::label('photo','Location Images') }}
                                                         <span >(Optional)</span>
-                                                        {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
+
+                                                        <input type="file" name="photo[]" class="form-control" style="margin-bottom:10px;" value="{{ old('photo') }}" multiple="true">
+
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
                                                         <p id="error1" style="display:none; color:#B81111;">
                                                         Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
@@ -147,8 +149,40 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('address','Location Address') }}<span style="color:red;">*</span>
-                                                        {{ Form::text('address',old('address'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Place Address')) }}
+                                                        {{ Form::text('address',old('address'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Place Address', 'data-validate-field' => 'address')) }}
                                                         {!! $errors->first('address', '<label id="address-error" class="error" for="address">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('longitude','Location Longitude') }}<span style="color:red;">*</span>
+                                                        {{ Form::text('longitude',old('longitude'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Longitude' , 'data-validate-field' => 'longitude')) }}
+                                                        {!! $errors->first('longitude', '<label id="longitude-error" class="error" for="longitude">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('latitude','Location Latitude') }}<span style="color:red;">*</span>
+                                                        {{ Form::text('latitude',old('latitude'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Latitude' , 'data-validate-field' => 'latitude')) }}
+                                                        {!! $errors->first('latitude', '<label id="latitude-error" class="error" for="latitude">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('from_time','Available From Time') }}<span style="color:red;">*</span>
+                                                        {{ Form::text('from_time',old('from_time'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Availabilty From Time' , 'data-validate-field' => 'from_time')) }}
+                                                        {!! $errors->first('from_time', '<label id="from_time-error" class="error" for="from_time">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('to_time','Available To Time') }}<span style="color:red;">*</span>
+                                                        {{ Form::text('to_time',old('to_time'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Availabilty To Time' , 'data-validate-field' => 'to_time')) }}
+                                                        {!! $errors->first('to_time', '<label id="to_time-error" class="error" for="to_time">:message</label>') !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -208,6 +242,21 @@
             phone: {
                 required: true
             },
+            address: {
+                required: true
+            },
+            longitude: {
+                required: true
+            },
+            latitude: {
+                required: true
+            },
+            from_time: {
+                required: true
+            },
+            to_time: {
+                required: true
+            },
         },
         messages: {
             user_id: {
@@ -221,6 +270,21 @@
             },
             phone: {
                 required: 'Phone number is required',
+            },
+            address: {
+                required: 'Address is required',
+            },
+            longitude: {
+                required: 'Longitude is required',
+            },
+            latitude: {
+                required: 'Latitude is required',
+            },
+            from_time: {
+                required: 'From which time you are available is required field',
+            },
+            to_time: {
+                required: 'Till which time you are available is required field',
             },
         },
     });

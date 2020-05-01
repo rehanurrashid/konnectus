@@ -7,6 +7,7 @@ use Yajra\Datatables\Datatables;
 use App\Http\Requests\StorePlace;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use App\PlacesPhoto;
 use App\Category;
 use App\Place;
 use App\User;
@@ -19,19 +20,43 @@ class PlaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Place $place)
     {
         if($request->ajax()){
 
-            $place = Place::with(['user:id,name'])->get();
+            $place = $place->newQuery()->with(['user','rating'])->withCount('rating');
+            // dd($place[0]->rating[0]->rate);
+
+            foreach ($place as $row) {
+
+                $rate = $row->rating()->avg('rate');
+                $rate = number_format((float)$rate, 1, '.', '');
+                $row->avg_rate = $rate;
+
+            }
             return Datatables::of($place)
-                ->addColumn('action', function ($place) {
+                ->addColumn('action', function (Place $place) {
                     return view('admin.actions.actions_place',compact('place'));
                     })
                 ->addColumn('user_name', function ($place) {
-                    return $place->user->name;
+                        if($place->user != Null){
+                            return $place->user->name;
+                        }
+                        else{
+                            return 'No User';
+                        }
+                    })
+                ->addColumn('rate', function ($place) {
+                    return $place->avg_rate;
+                    })
+                ->addColumn('reviews', function ($place) {
+                    return $place->rating_count;
+                    })
+                ->addColumn('direction', function ($place) {
+                    return view('admin.actions.actions_get_direction',compact('place'))->render();
                     })
                 ->editColumn('id', 'ID: {{$id}}')
+                ->rawColumns(['direction'])
                 ->make(true);
         }
        return view('admin.place.index');
@@ -56,24 +81,33 @@ class PlaceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StorePlace $request)
-    {     
-        if ($request['photo']){
+    {   
+        $place = new Place;
+        $place = Place::create([
+            'user_id' => $request->user_id,
+            'category_id' => $request->category_id,
+            'slug' => $place->setAttribute('slug', $request->name),
+            'name' => $request->name,
+            'tags' => $request->tags,
+            'phone' =>$request->phone,
+            'address' => $request->address,
+            'longitude' => $request->longitude,
+            'latitude' => $request->latitude,
+            'from_time' => $request->from_time,
+            'to_time' => $request->to_time,
+        ]);
+
+        foreach ($request->photo as $file) {
             
-            $request['picture'] = $request->file('photo')->store('public/storage');
+            $request['picture'] = $file->store('public/storage');
             $request['picture'] = Storage::url($request['picture']);
             $request['picture'] = asset($request['picture']);
-            $filename = $request->file('photo')->hashName();
-        }
 
-        $place = new place;
-        $place->user_id = $request->user_id;
-        $place->category_id = $request->category_id;
-        $place->setAttribute('slug', $request->title);
-        $place->title = $request->title;
-        $place->tags = $request->tags;
-        $place->description = $request->description;
-        $place->image = $filename;
-        $place->save();
+            PlacesPhoto::create([
+                'place_id' => $place->id,
+                'photo' => $request['picture']
+            ]);
+        }
 
         if($place){
             Session::flash('message', 'Place Created Successfully!'); 
@@ -90,8 +124,10 @@ class PlaceController extends Controller
      */
     public function show($id)
     {
-        $place = Place::with(['user:id,name','category:id,name'])->where('id',$id)->first();
-        // dd($place->user->name);
+        $place = Place::with(['user:id,name','category:id,name','rating'])->withCount(['rating'])->where('id',$id)->first();
+        $rate = $place->rating()->avg('rate');
+        $rate = number_format((float)$rate, 1, '.', '');
+        $place->avg_rate = $rate;
         return view('admin.place.show',compact('place'));
     }
 
@@ -119,6 +155,7 @@ class PlaceController extends Controller
     public function update(Request $request, $id)
     {
         $place = Place::find($id);
+        // dd($place, $request->status);
 
         $place->status = $request->status;
         $place->save();

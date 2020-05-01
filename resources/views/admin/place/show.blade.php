@@ -100,6 +100,7 @@
                                                 </div>
                                                 <div class="col">
                                                 	<h4>{{$place->address}}</h4>
+                                                    <a href='https://www.google.com/maps/{{ "@".$place->latitude }},{{ $place->longitude }},15z' target="_blank" class="btn btn-success " style="width: 150px">Get Direction &nbsp; <i class="fas fa-external-link-alt"></i></a>
                                                 </div>
                                             </div>
                                             <hr>
@@ -109,6 +110,24 @@
                                                 </div>
                                                 <div class="col">
                                                 	<h4>{{$place->phone}}</h4>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <h4 class="float-right">Rating: </h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>{{$place->avg_rate}}</h4>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <h4 class="float-right">Total Reviews: </h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>{{$place->rating_count}}</h4>
                                                 </div>
                                             </div>
                                             <hr>
@@ -140,7 +159,7 @@
                                                 </div>
                                                 <div class="col">
                                                 	@if(!empty($place->image))
-													<img src="{{ asset('storage/storage/'.$place->image) }}" alt="Location Image" width="30%">
+													<img src="{{$place->image }}" alt="Location Image" width="30%" class="img-thumbnail">
 													@else
 													<h4>No Image</h4>
                                                 	@endif
