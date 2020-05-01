@@ -5,7 +5,7 @@
  *  Place here all your custom js. Make sure it's loaded after app.js
  *
  * ---------------------------------------------------------------------------- */
-const myurl = "http://oranje-tech.com/demo/konnectus/";
+const myurl = "http://oranje-tech.com/demo/konnectus";
 function load(method,url,responseId) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
