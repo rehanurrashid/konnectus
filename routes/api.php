@@ -54,8 +54,6 @@ Route::group(['middleware' => 'auth:api'], function(){
 	
 	Route::get('/categories', 'API\CategoryController@index');
 
-	Route::get('/languages', 'API\LanguageController@index');
-
 	Route::get('/categories/place/popular', 'API\CategoryController@most_visited_place_category');
 	Route::get('/categories/service/popular', 'API\CategoryController@most_visited_service_category');
 

@@ -28,6 +28,8 @@ class CreateServicesTable extends Migration
             $table->text('tags')->nullable();
             $table->string('from_time',255);
             $table->string('to_time',255);
+            $table->string('country_code',255);
+            $table->string('language_code',255);
             $table->timestamps();
             $table->softDeletes();
         });

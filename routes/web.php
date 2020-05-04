@@ -32,7 +32,6 @@ Route::prefix('admin')->middleware(['auth:web','check.role:admin'])->group(funct
   	Route::put('acount-settings/{id}','AdminController@update')->name('admin.account.update');
 
   	Route::resource('users', 'UserController');
-    Route::resource('languages', 'LanguageController');
   	Route::resource('categories','CategoryController');
   	Route::post('dependent/category','CategoryController@fetch')->name('dynamicdependent.fetch');
   	Route::resource('services','ServiceController');

@@ -9,7 +9,6 @@ use App\PlacePhoto;
 use App\PlaceRating;
 use App\User; 
 use App\Category;
-use App\Language;
 
 class Place extends Model
 {
@@ -50,10 +49,6 @@ class Place extends Model
     public function rating()
     {
         return $this->hasMany(PlaceRating::class, 'place_id','id')->with('user');
-    }
-
-    public function languages(){
-        return $this->belongsToMany(Language::class, 'place_languages', 'place_id', 'language_id');
     }
 
     public function photos(){

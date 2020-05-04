@@ -5,10 +5,10 @@ namespace App\Http\Controllers\API;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\PlacePhoto;
-use Validator;
-use App\Place;
 use App\PlaceRating;
+use App\PlacePhoto;
+use App\Place;
+use Validator;
 use DB;
 
 class PlaceController extends Controller
@@ -18,7 +18,7 @@ class PlaceController extends Controller
         $validator = Validator::make($request->all(), [ 
             'name' => 'required', 
             'category_id' => 'required',
-            'language_id' => 'required',
+            'language_code' => 'required',
             'phone' => 'required', 
             'longitude' => 'required',
             'latitude' => 'required',
@@ -27,7 +27,7 @@ class PlaceController extends Controller
             'to_time' => 'required',
         ]);
         if ($validator->fails()) { 
-                return response()->json(['error'=>$validator->errors()], 401);            
+            return response()->json(['error'=>$validator->errors()], 401);            
         }
 
         $place = new Place;
@@ -44,6 +44,7 @@ class PlaceController extends Controller
         $place->from_time = $request->from_time;
         $place->to_time = $request->to_time;
         $place->country_code = $request->country_code;
+        $place->language_code = $request->language_code;
         $place->save();
 
         foreach ($request->image as $file) {
@@ -58,8 +59,6 @@ class PlaceController extends Controller
             ]);
         }
 
-        $place->languages()->attach($request->language_id);
-
         if($place){
         	return response()->json(['success'=>'Place Added Successfully!'], 200); 
         }
@@ -71,8 +70,10 @@ class PlaceController extends Controller
 
     public function show($id){
 
-        $place = Place::with(['category','languages','photos','rating'])->withCount(['rating'])->where('id',$id)->first();
-        // $place['photos'] = PlacePhoto::where('place_id',$id)->get();
+        $place = Place::with(['category','photos','rating'])->withCount(['rating'])->where('id',$id)->first();
+
+        $place->language_code = explode(',',$place->language_code);
+
         if($place != null){
 
             $rate = $place->rating()->avg('rate');
@@ -91,7 +92,7 @@ class PlaceController extends Controller
         $places = Place::with(['category','photos'])->withCount(['rating'])->where('status',1)->get();
 
         foreach ($places as $place) {
-
+            $place->language_code = explode(',',$place->language_code);
             $rate = $place->rating()->avg('rate');
             $rate = number_format((float)$rate, 1, '.', '');
             $place->avg_rate = $rate;
@@ -147,10 +148,15 @@ class PlaceController extends Controller
 
         if(!empty($request->slug)){
 
-            $place = Place::with(['category','languages','photos','rating'])->withCount(['rating'])->where('slug', $request->slug)->first();
+            $place = Place::with(['category','photos','rating'])->withCount(['rating'])->where('slug', $request->slug)->first();
             
 
             if(!empty($place)){
+
+
+                foreach ($places as $place) {
+                    $place->language_code = explode(',',$place->language_code);
+                }
 
                 $place['latest_places'] = Place::orderBy('id', 'desc')->take(5)->get();
 

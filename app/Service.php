@@ -9,7 +9,6 @@ use App\ServiceRating;
 use App\ServicePhoto;
 use App\User; 
 use App\Category;
-use App\Language;
 
 class Service extends Model
 {
@@ -53,8 +52,5 @@ class Service extends Model
     }
     public function photos(){
         return $this->hasMany(ServicePhoto::class);
-    }
-    public function languages(){
-        return $this->belongsToMany(Language::class, 'place_languages', 'service_id', 'language_id');
     }
 }

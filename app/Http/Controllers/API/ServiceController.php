@@ -5,10 +5,10 @@ namespace App\Http\Controllers\API;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\ServicePhoto;
-use Validator;
-use App\Service;
 use App\ServiceRating;
+use App\ServicePhoto;
+use App\Service;
+use Validator;
 
 class ServiceController extends Controller
 {
@@ -16,11 +16,11 @@ class ServiceController extends Controller
     { 
         $validator = Validator::make($request->all(), [ 
             'name' => 'required', 
-            'category_id' => 'required', 
+            'category_id' => 'required',
+            'language_code' => 'required', 
             'phone' => 'required', 
             'longitude' => 'required',
             'latitude' => 'required',
-            'image' => 'required',
             'from_time' => 'required',
             'to_time' => 'required',
         ]);
@@ -42,6 +42,7 @@ class ServiceController extends Controller
         $service->from_time = $request->from_time;
         $service->to_time = $request->to_time;
         $service->country_code = $request->country_code;
+        $service->language_code = $request->language_code;
         $service->save();
 
         foreach ($request->image as $file) {
@@ -56,8 +57,6 @@ class ServiceController extends Controller
             ]);
         }
 
-        $service->languages()->attach($request->language_id);
-
         if($service){
             return response()->json(['success'=>'Service Added Successfully!'], 200); 
         }
@@ -69,7 +68,8 @@ class ServiceController extends Controller
 
     public function show($id){
 
-        $service = Service::with(['category','photos','languages','rating'])->withCount(['rating'])->where('id',$id)->first();
+        $service = Service::with(['category','photos','rating'])->withCount(['rating'])->where('id',$id)->first();
+        $service->language_code = explode(',',$service->language_code);
         $rate = $service->rating()->avg('rate');
         $rate = number_format((float)$rate, 1, '.', '');
         $service->avg_rate = $rate;
@@ -78,10 +78,10 @@ class ServiceController extends Controller
 
     public function show_all(){
 
-        $services = Service::with(['category','languages','photos'])->withCount(['rating'])->where('status',1)->get();
+        $services = Service::with(['category','photos'])->withCount(['rating'])->where('status',1)->get();
 
         foreach ($services as $service) {
-
+            $service->language_code = explode(',',$service->language_code);
             $rate = $service->rating()->avg('rate');
             $rate = number_format((float)$rate, 1, '.', '');
             $service->avg_rate = $rate;
