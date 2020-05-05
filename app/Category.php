@@ -22,12 +22,12 @@ class Category extends Model
     }
 
     public function places(){
-    	return $this->hasMany(Place::class,'category_id','id')->with(['rating','photos','languages'])->withCount('rating');
+    	return $this->hasMany(Place::class,'category_id','id')->with(['rating','photos'])->withCount('rating');
 
     }
 
     public function services(){
-        return $this->hasMany(Service::class,'category_id','id')->with(['rating','photos','languages'])->withCount('rating');
+        return $this->hasMany(Service::class,'category_id','id')->with(['rating','photos'])->withCount('rating');
     }
 
     public function popular(){
