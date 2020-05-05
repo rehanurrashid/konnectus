@@ -20,6 +20,14 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{{ route('posts.index') }}" class="nav-link {{Request::is(['posts','posts/*']) ? 'active' : ''}}">
+                <i class="fas fa-sticky-note"></i>
+                <span>
+                    Blog Post Management
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('services.index') }}" class="nav-link {{Request::is(['services','services/*']) ? 'active' : ''}}">
                 <i class="fa fa-archive" aria-hidden="true"></i>
                 <span>

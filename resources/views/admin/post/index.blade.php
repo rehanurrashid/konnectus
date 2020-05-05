@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Users')
+@section('title', 'Blog Post')
 
 @push('before-styles')
     <style>
@@ -71,7 +71,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div>
-                                    <a class="btn btn-dark w-25" href="{{ route('users.create') }}">Add New</a>
+                                    <a class="btn btn-dark w-25" href="{{ route('posts.create') }}">Add New</a>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                                 <div>
                                     <div class="card">
                                         <div class="card-header header-elements-inline">
-                                            <h5 class="card-title">Users List</h5>
+                                            <h5 class="card-title">Blog Post List</h5>
 
                                             <div class="header-elements">
                                                 <div class="list-icons">
@@ -93,11 +93,9 @@
                                             <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Name</th>
-                                                <th>Username</th>
-                                                <th>Email</th>
-                                                <!-- <th>Phone</th> -->
-                                                <th>Verification</th>
+                                                <!-- <th>User Name</th> -->
+                                                <th scope="col" style="width: 400px;">Topic</th>
+                                                <th>Image</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
@@ -111,14 +109,12 @@
                                                     serverSide: true,
                                                     autoWidth: false,
                                                     responsive: true,
-                                                    ajax: '{!! route('users.index') !!}',
+                                                    ajax: '{!! route('posts.index') !!}',
                                                     columns: [
                                                         { data: 'id', name: 'id' },
-                                                        { data: 'name', name: 'name' },
-                                                        { data: 'username', name: 'username' },
-                                                        { data: 'email', name: 'email' },
-                                                        // { data: 'phone', name: 'phone' },
-                                                        { data: 'verification', name: 'verification' },
+                                                        // { data: 'user_name', name: 'user_name' },
+                                                        { data: 'topic', name: 'topic' },
+                                                        { data: 'image', name: 'image' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],
                                                     buttons: {

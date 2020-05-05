@@ -32,9 +32,13 @@ class UserController extends Controller
                 ->addColumn('action', function ($user) {
                     return view('admin.actions.actions_user',compact('user'));
                     })
-                ->addColumn('phone', function ($user) {
-                    return $user->profile->phone;
-                    })
+                // ->addColumn('phone', function ($user) {
+                //     if($user->profile->phone != Null){
+                //             return $user->profile->phone;
+                //         }else{
+                //             return '<b>No Phone Number Yet!</b>';
+                //         }
+                //     })
                 ->addColumn('verification', function ($user) {
                         if($user->phone_verified_at != Null){
                             return '<b>Verified at: </b>'.$user->phone_verified_at;
@@ -43,7 +47,6 @@ class UserController extends Controller
                         }
                     })
                 ->editColumn('id', 'ID: {{$id}}')
-                ->removeColumn('password')
                 ->rawColumns(['verification'])
                 ->make(true);
         }
