@@ -18,8 +18,10 @@ class CreatePostsTable extends Migration
             $table->bigInteger('user_id');
             $table->string('topic');
             $table->string('slug',255);
+            $table->longText('excerpt',255);
             $table->longText('description');
-            $table->longText('image')->nullable();
+            $table->string('image');
+            $table->string('tags')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

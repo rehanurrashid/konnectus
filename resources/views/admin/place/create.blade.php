@@ -32,6 +32,7 @@
         .bootstrap-tagsinput .badge {
             margin: 3px 6px;
             padding: 5px 8px;
+            font-size:16px;
         }
     </style>
 

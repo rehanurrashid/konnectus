@@ -1,0 +1,273 @@
+html{
+	scroll-behavior: smooth;
+}
+.text-nav{
+  color: white;
+  font-weight: 600;
+}
+.text-nav:hover{
+  color: #003470;
+}
+.nav-link:hover{
+  color:#003470 !important;
+}
+.main-section{
+  background-image: url(../images/bg1.png);
+  background-repeat: no-repeat;  
+  width: 100%;
+  background-size:100% 100% !important;
+  font-style: sans-serif;
+  font-weight: 600;
+}
+.empty{
+	margin-top: 16rem;
+}
+.intro-text{
+	margin-left: 10rem;
+}
+.intro-text h1{
+	margin-left: 4rem;
+	font-size: 42px;
+}
+.intro-text p{
+	margin-left: 4rem;
+	font-size: 22px;
+	font-weight: 300;
+}
+.app-img-1{
+	width: 18%;
+	margin-left: 4rem;
+	margin-right: 1rem;
+}
+.app-img-2{
+	width: 18%;
+}
+.app-img-3{
+	width: 20%;
+	margin-left: 1rem;
+	margin-right: 1rem;
+}
+.app-img-4{
+	width: 20%;
+}
+.top-img{
+	width: 100%;
+	margin-top: 6.3rem;
+}
+.blogs-section{
+	background-image: url(../images/blogbackgroundw.png);
+	background-repeat: no-repeat;  
+	width: 100%;
+	background-size:100% 100% !important;
+	font-style: sans-serif;
+	font-weight: 600;
+	
+}
+.fone-image-1{
+	float: right;
+	width: 15%;
+	margin-right: 50px;
+}
+.fone-image-2{
+	margin-left: 50px; width: 15%;
+}
+.abt-img{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+.con-img{
+	margin-top: -169px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+input {
+  outline: 0;
+  border-width: 0 0 1px;
+  width: 50%;
+  border-color: grey;
+}
+input:focus {
+  border-color: purple;
+}
+.btn-primary{
+	border-radius: 10px;
+	background-color: #003470!important;
+	padding: 8px 35px;
+	margin-left: 10px;
+}
+.download-app{
+	background-image: url(../images/download.png);
+	background-repeat: no-repeat;  
+	width: 100%;
+	background-size:100% 100% !important;
+	font-style: sans-serif;
+	font-weight: 600;
+}
+.img-dwnldapp-1{
+    position: absolute;
+    width: 35%;
+    margin-left: 9rem;
+    margin-top: 30px;
+}
+.img-dwnldapp-2{
+	float: right;
+	margin-top: -45px;
+	width: 35%;
+	margin-bottom: 30px;
+
+}
+.info-imgs{
+	width: 18%;
+}
+ul{
+	list-style-type: none;
+}
+footer{
+	background-image: url(../images/footerbackground.png);
+	background-repeat: no-repeat;  
+	width: 100%;
+	background-size:100% 100% !important;
+	font-style: sans-serif;
+}
+.margin-1{
+	margin:6rem;
+}
+.foot-marg{
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+}
+.usefull{
+	margin-left: 5.5rem;
+}
+.img-ffoter{
+	width: 70%;
+	padding-bottom: 1rem;
+}
+/* blog details */
+
+.banner-sec{
+	background-image: url(../images/banner.png);
+	background-repeat: no-repeat;  
+	width: 100%;
+	background-size:100% 100% !important;
+	font-style: sans-serif;
+}
+.blogs-b{
+	padding-top: 12rem;
+}
+.hy-link{
+	padding-bottom: 12rem;
+}
+.hashtag{
+	border: 1px solid purple; 
+	border-radius: 10px; 
+	padding: 5px; 
+	width: 15%; 
+	margin-right: 10px;
+}
+.fancy-div{
+	background-color: #F5F5F5;
+	height: 12rem; 
+	border-left: 5px solid purple;
+	padding: 15px;
+}
+
+
+@media (max-width: 425px){
+ .empty{
+ 	margin-top: 0rem!important;
+ }
+ .intro-text{
+ 	margin-left: 0rem!important;
+ 	margin-top: 1rem!important;
+ }
+ .margin-1{
+ 	display: none;
+ }
+ .intro-text h1{
+ 	font-size: 32px!important;
+ 	margin-left: 0rem!important; 
+ 	text-align: center;
+ }
+ .intro-text p{
+ 	font-size: 15px!important;
+ 	margin-left: 0rem!important; 
+ 	text-align: center;
+ }
+ .intro-text img{
+ 	margin-left: 3rem;
+ }
+ .top-img{
+	width: 58%;
+	margin-top: 0.5rem!important;
+	float: right;
+}
+.img-dwnldapp-1 {
+    width: 33%;
+    margin-left: 8rem!important;
+    margin-top: 6rem;
+}
+.img-dwnldapp-2 {
+	margin-top: 15px!important;
+}
+.usefull{
+	margin-left: 0rem!important;
+}
+.foot-link{
+	padding: 0!important;
+}
+ul{
+	padding: 0;
+}
+.img-ffoter{
+	width: 30%!important;
+}
+.con-img {
+    margin-top: -194px !important;
+    width: 30% !important;
+}
+.abt-img{
+ 	width: 70%!important;
+ }
+ .blg-img{
+ 	display: block;
+ 	margin: auto;
+ 	padding: 10px;
+ }
+ .hashtag{
+ 	width: auto;
+ }
+}
+@media (max-width: 768px){
+	.img-dwnldapp-1 {
+    margin-left: 5rem!important;
+}
+.info-imgs{
+	width: 15%!important;
+}
+.empty{
+ 	margin-top: 1rem!important;
+ }
+  .intro-text{
+ 	margin-left: 0rem!important;
+ 	margin-top: 1rem!important;
+ }
+ .abt-img{
+ 	width: 100%!important;
+ }
+ .con-img {
+ 	margin-top: -122px!important;
+ 	width: 30%!important;
+ }
+}
+ @media (max-width: 1024px){
+ 	.empty{
+ 	margin-top: 1rem!important;
+ }
+  .intro-text{
+ 	margin-left: 0rem!important;
+ 	margin-top: 1rem!important;
+ }
+}

@@ -64,7 +64,7 @@ class PostController extends Controller
     public function store(StorePost $request)
     {
         //storing image
-        
+        $post = new Post;
         if ($request['photo']){
             
             $request['picture'] = $request->file('photo')->store('public/storage');
@@ -74,11 +74,13 @@ class PostController extends Controller
             $post->image = $request['picture'];
         }
 
-        $post = new Post;
+        
         $post->user_id = $request->user_id;
         $post->setAttribute('slug', $request->topic);
+        $post->excerpt = $request->excerpt;
         $post->topic = $request->topic;
         $post->description = $request->description;
+        $post->tags = $request->tags;
         $post->save();
 
         if($post){
@@ -134,8 +136,10 @@ class PostController extends Controller
          }
 
         $post->user_id = $request->user_id;
+        $post->excerpt = $request->excerpt;
         $post->topic = $request->topic;
         $post->description = $request->description;
+        $post->tags = $request->tags;
         $post->save();
 
         if($post){

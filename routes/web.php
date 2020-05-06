@@ -14,13 +14,33 @@
 
 
 
-Auth::routes();
-
-Route::view('/', 'welcome',['name' => 'Konnectus']);
+// Auth::routes();
 
 Route::match(['get','post'],'/home', 'HomeController@index')->name('home');
 
 // Admin Routes 
+
+Route::get('admin/login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('admin/login', 'Auth\LoginController@login')->name('admin.login');
+Route::post('admin/logout', 'Auth\LoginController@logout')->name('admin.logout');
+
+// Password Reset Routes...
+Route::post('password/email', [
+  'as' => 'password.email',
+  'uses' => 'Auth\ForgotPasswordController@sendResetLinkEmail'
+]);
+Route::get('password/reset', [
+  'as' => 'password.request',
+  'uses' => 'Auth\ForgotPasswordController@showLinkRequestForm'
+]);
+Route::post('password/reset', [
+  'as' => 'password.update',
+  'uses' => 'Auth\ResetPasswordController@reset'
+]);
+Route::get('password/reset/{token}', [
+  'as' => 'password.reset',
+  'uses' => 'Auth\ResetPasswordController@showResetForm'
+]);
 
 Route::post('admin/logout', 'Auth\LoginController@logout')->name('admin.logout');
 
@@ -40,3 +60,8 @@ Route::prefix('admin')->middleware(['auth:web','check.role:admin'])->group(funct
   	Route::resource('pending_places','PendingPlaceController');
   	Route::resource('pending_services','PendingServiceController');
 });
+
+// Front end User Side Routes
+
+Route::get('/', 'HomeController@home')->name('home');
+Route::get('/blog/{slug}', 'HomeController@single')->name('single');

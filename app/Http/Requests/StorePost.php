@@ -26,6 +26,8 @@ class StorePost extends FormRequest
          return [
             'topic' => 'bail|required',
             'description' => 'bail|required',
+            'excerpt' => 'bail|required',
+            'photo' => 'bail|required',
         ];
     }
 }
