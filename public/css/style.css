@@ -58,7 +58,7 @@ html{
 	background-image: url(../images/blogbackgroundw.png);
 	background-repeat: no-repeat;  
 	width: 100%;
-	background-size:100% 100% !important;
+	background-size:auto 100% !important;
 	font-style: sans-serif;
 	font-weight: 600;
 	
@@ -101,7 +101,7 @@ input:focus {
 	background-image: url(../images/download.png);
 	background-repeat: no-repeat;  
 	width: 100%;
-	background-size:100% 100% !important;
+	background-size:auto 100% !important;
 	font-style: sans-serif;
 	font-weight: 600;
 }
@@ -193,11 +193,11 @@ footer{
  }
  .intro-text p{
  	font-size: 15px!important;
- 	margin-left: 0rem!important; 
+ 	/*margin-left: 0rem!important; */
  	text-align: center;
  }
  .intro-text img{
- 	margin-left: 3rem;
+ 	/*margin-left: 3rem;*/
  }
  .top-img{
 	width: 58%;
@@ -270,4 +270,46 @@ ul{
  	margin-left: 0rem!important;
  	margin-top: 1rem!important;
  }
+}
+
+/* *************************  Glaxy S5   ***************************************/
+
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+	.main-section{
+		background-size:auto 100% !important;
+	}
+	.intro-text p {
+		margin:10px;
+	}
+	.intro-text img {
+		/*margin-left: 0;*/
+	}
+	.back-im{
+		margin-bottom: 20px;
+	}
+	.app-img-1 {
+	    margin-left: 2rem;
+
+	}
+	.our-blogs{
+		clear: both;
+		padding-top: 0 !important;
+	}
+	.our-blogs h3{
+		padding-top: 0 !important;
+	}
+	footer{
+		background-size:auto 100% !important;
+	}
+	footer .col-md-2 br{
+		display: none;
+	}
+}
+.back-im{
+	background-image: url(../images/aboutbg.png);
+    background-repeat: no-repeat;
+    width: 100%;
+    background-position: center;
+    background-size: 100% 100% !important;
+    background-origin: content-box;
 }

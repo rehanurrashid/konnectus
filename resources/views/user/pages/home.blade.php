@@ -34,34 +34,22 @@
     <h3 class=" text-center text-capitalize mt-5 mb-3" style="color: #c2236c"><span style="color: #003470;">about </span>us?</h3>
     <p class=" text-center text-muted mb-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text<br>ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.<br>It has survived not only five centuries, but also the leap intod</p>
     <div class="margin-1"></div>
-    <div class="row ">
-      <div class="col-md-3">
-        <div class="back-im">
-          <img class="abt-img" src="{{asset('images/aboutbg.png')}}">
-          <img class="con-img" src="{{asset('images/connect people.png')}}">
-          <p class="text-white text-center text-capitalize p-4">connect people</p>
-        </div>
+    <div class="row about-us">
+      <div class="col-md-3 back-im text-center">
+          <img class="mt-4" src="{{asset('images/connect people.png')}}">
+          <p class="text-white text-capitalize p-3 mt-4 font-weight-bold">connect people</p>
       </div>
-      <div class="col-md-3">
-        <div class="back-im">
-          <img class="abt-img" src="{{asset('images/aboutbg.png')}}">
-          <img class="con-img" src="{{asset('images/services.png')}}">
-          <p class="text-white text-center text-capitalize p-4">Services</p>
-        </div>
+      <div class="col-md-3 back-im text-center">
+          <img class="mt-4" src="{{asset('images/services.png')}}">
+          <p class="text-white text-capitalize p-3 mt-4 font-weight-bold">Services</p>
       </div>
-      <div class="col-md-3">
-        <div class="back-im">
-          <img class="abt-img" src="{{asset('images/aboutbg.png')}}">
-          <img class="con-img" src="{{asset('images/connect people.png')}}">
-          <p class="text-white text-center text-capitalize p-4">connect people</p>
-        </div>
+      <div class="col-md-3 back-im text-center">
+          <img class="mt-4" src="{{asset('images/connect people.png')}}">
+          <p class="text-white text-capitalize p-3 mt-4 font-weight-bold">connect people</p>
       </div>
-      <div class="col-md-3">
-        <div class="back-im">
-          <img class="abt-img" src="{{asset('images/aboutbg.png')}}">
-          <img class="con-img" src="{{asset('images/secuirty.png')}}">
-          <p class="text-white text-center text-capitalize p-4">security check</p>
-        </div>
+      <div class="col-md-3 back-im text-center">
+          <img class="mt-4" src="{{asset('images/secuirty.png')}}">
+          <p class="text-white text-capitalize p-3 mt-4 font-weight-bold">security check</p>
       </div>
     </div>
     <div class="margin-1"></div>
@@ -69,9 +57,7 @@
 </section>
 <section class="blogs-section mb-5" id="blogs">
   <div class="container-fluid">
-    <div>
-      <img class="fone-image-1" src="{{asset('images/half phone.png')}}">
-    </div>
+        <img class="fone-image-1" src="{{asset('images/half phone.png')}}">
     <div class="our-blogs">
       <h3 class="text-center text-white text-capitalize pt-5">our <span class="font-weight-bold">blogs</span></h3>
       <p class=" text-center text-white mb-5" style="font-weight: 300;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text<br>ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.<br>It has survived not only five centuries, but also the leap intod</p>
