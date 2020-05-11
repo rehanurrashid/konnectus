@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Update Service')
+@section('title', 'Update Approved Service')
 
 @push('before-styles')
     <link href="{{ asset('admin/css/layout.min.css') }}" rel="stylesheet" type="text/css">
@@ -76,9 +76,20 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('status','Change Request Status') }}<span style="color:red;">*</span>
-                                                        {{ Form::select('status', ['1' => 'Approved', '0' => 'Disapproved'] ,'1' , ['class' => 'form-control select2', 'style'=> 'margin-bottom:10px;']) }}
+                                                        {{ Form::select('status', ['1' => 'Approved', '0' => 'Denied','2' => 'Pending'] ,'1' , ['class' => 'form-control select2 status', 'style'=> 'margin-bottom:10px;']) }}
 
                                                         {!! $errors->first('status', '<label id="status-error" class="error" for="status">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row d-none" id="why_deny">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        {{ Form::label('why_deny','Why you want to disapproved/reject this request?') }}<span style="color:red;">* (Admin note)</span>
+                                                        {{ Form::textarea('why_deny',old('why_deny'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Why you want to disapproved/reject this request?')) }}
+                                                        {!! $errors->first('why_deny', '<label id="why_deny-error" class="error" for="why_deny">:message</label>') !!}
+
+                                                        <p style="color: #B81111" id="error-reason" class="d-none ml-3">Reason to deny request is required!</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -110,5 +121,36 @@
         <!-- /main content -->
 
     </div>
+<script type="text/javascript">
+$(document).ready(function(){
 
+     // searchable dropdown
+    $('.select2').select2();
+
+    $("select.status").change(function(){
+
+    var selectedType = $(this).children("option:selected").text();
+        
+    if(selectedType == 'Denied'){
+        $('#why_deny').removeClass('d-none');
+    }
+    else{
+        $('#why_deny').addClass('d-none');
+    }
+
+    });
+
+    $('button[type="submit"]').click(function(e){
+
+        e.preventDefault();
+
+        if($('textarea[name="why_deny"]').val() == ''){
+            $('#error-reason').removeClass('d-none')
+        }
+        else{
+            $('.js-form').submit();
+        }
+    })
+})
+</script>
 @endsection

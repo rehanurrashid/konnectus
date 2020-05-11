@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Services')
+@section('title', 'Approved Services')
 
 @push('before-styles')
     <style>
@@ -94,12 +94,11 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>User Name</th>
-                                                <th>Location Name</th>
+                                                <th>Service Name</th>
                                                 <th>Phone</th>
                                                 <th>Status</th>
                                                 <th>Rate</th>
                                                 <th>Total Reviews</th>
-                                                <th>Tags</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
@@ -122,7 +121,6 @@
                                                         { data: 'status', name: 'status' },
                                                         { data: 'rate', name: 'rate' },
                                                         { data: 'reviews', name: 'reviews' },
-                                                        { data: 'tags', name: 'tags' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],
                                                     buttons: {
@@ -162,7 +160,20 @@
                 <!-- /dashboard content -->
             </div>
             <!-- /content area -->
+<script type="text/javascript">
+    $(document).ready(function(){
 
+
+        $(document).on( "click", ".delete-row", function() {
+          let id = $( this ).next('p').text() ;
+          $('.confirm').attr('href','javascript:sdelete("admin/services/'+id+'")');
+          $(document).on("click", ".confirm", function(){
+            $('#exampleModal').modal('toggle');
+          })
+        });
+
+    })
+</script>
 
             <!-- Footer -->
             @include('admin.includes.footer')

@@ -26,6 +26,9 @@ class CategoryController extends Controller
                 ->addColumn('action', function($category) {
                     return view('admin.actions.actions_category',compact('category'));
                     })
+                ->addColumn('image', function($category) {
+                    return '<img src="'.$category->image.'" width="40%">';
+                    })
                 ->addColumn('parent_name', function($category) {
                         if($category->parent_id == Null){
                             return 'No Parent';
@@ -36,6 +39,7 @@ class CategoryController extends Controller
                         }
                     })
                 ->editColumn('id', 'ID: {{$id}}')
+                ->rawColumns(['image'])
                 ->make(true);
         }
        return view('admin.category.index');
@@ -59,22 +63,19 @@ class CategoryController extends Controller
      */
     public function store(StoreCategory $request)
     {
-        $filename ='';
-
+        $category = new Category;
         if ($request['photo']){
             $originalImage= $request->file('photo');
             $request['picture'] = $request->file('photo')->store('public/storage');
             $request['picture'] = Storage::url($request['picture']);
             $request['picture'] = asset($request['picture']);
-            $filename = $request->file('photo')->hashName();
-
+            // $filename = $request->file('photo')->hashName();
+            $category->image = $request['picture'];
         }
-
-        $category = new Category;
+        
         $category->parent_id = $request->parent_id;
         $category->name = $request->name;
         $category->type = $request->type;
-        $category->image = $request['picture'];
         $category->save();
 
         if($category){
@@ -119,24 +120,18 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
 
-        $filename ='';
-
         if ($request['photo']){
             $originalImage= $request->file('photo');
             $request['picture'] = $request->file('photo')->store('public/storage');
             $request['picture'] = Storage::url($request['picture']);
             $request['picture'] = asset($request['picture']);
-            $filename = $request->file('photo')->hashName();
-
-        }
-        else{
-            $filename =$category->image;
+            // $filename = $request->file('photo')->hashName();
+            $category->image = $request['picture'];
         }
 
         $category->parent_id = $request->parent_id;
         $category->name = $request->name;
         $category->type = $request->type;
-        $category->image = $request['picture'];
         $category->save();
 
         if($category){

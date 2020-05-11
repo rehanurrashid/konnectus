@@ -68,9 +68,9 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
-                                            	<div class="col-md-6">
+                                            	<div class="col-md-7">
                                             		<div class="row">
-		                                                <div class="col-md-6">
+		                                                <div class="col-md-5">
 		                                                	<h4 class="float-right">Full Name: </h4>
 		                                                </div>
 		                                                <div class="col">
@@ -79,7 +79,7 @@
 		                                            </div>
 		                                            <hr>
 													<div class="row">
-		                                                <div class="col-md-6">
+		                                                <div class="col-md-5">
 		                                                	<h4 class="float-right">Username: </h4>
 		                                                </div>
 		                                                <div class="col">
@@ -88,8 +88,8 @@
 		                                            </div>
 		                                            <hr>
 		                                            <div class="row">
-		                                                <div class="col-md-6">
-		                                                	<h4 class="float-right">Email </h4>
+		                                                <div class="col-md-5">
+		                                                	<h4 class="float-right">Email: </h4>
 		                                                </div>
 		                                                <div class="col">
 		                                                	@if($user->email != Null)
@@ -100,7 +100,7 @@
 		                                                </div>
 		                                            </div>
                                             	</div>
-                                            	<div class="col-md-6">
+                                            	<div class="col-md-5">
                                             		@if($user->profile->photo != Null)
                                             		<img src="{{ $user->profile->photo }}" alt="User Image" width="50%" class="img-thumbnail float-right mr-4">
 
@@ -178,7 +178,7 @@
 															{{$user->profile->city}}
 														</h4>
                                                 	@else
-														<h4 class="text-danger">No Country Yet!</h4>
+														<h4 class="text-danger">No City Yet!</h4>
                                                 	@endif
                                                 </div>
                                             </div>

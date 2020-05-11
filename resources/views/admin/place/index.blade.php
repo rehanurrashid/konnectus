@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Places')
+@section('title', 'Approved Places')
 
 @push('before-styles')
     <style>
@@ -31,6 +31,7 @@
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>
     <script src="{{ asset('admin/js/demo_pages/dashboard.js') }}"></script>
+
 @endpush
 
 @section('content')
@@ -100,7 +101,6 @@
                                                 <th>Status</th>
                                                 <th>Rate</th>
                                                 <th>Total Reviews</th>
-                                                <th>Tags</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
@@ -124,7 +124,6 @@
                                                         { data: 'status', name: 'status' },
                                                         { data: 'rate', name: 'rate' },
                                                         { data: 'reviews', name: 'reviews' },
-                                                        { data: 'tags', name: 'tags' },
                                                         {data: 'action', name: 'action', orderable: false, searchable: false}
                                                     ],
                                                     buttons: {
@@ -150,6 +149,7 @@
                                                 });
                                             });
                                         </script>
+
                                 @endpush
                                 <!-- /basic initialization -->
 
@@ -164,7 +164,20 @@
                 <!-- /dashboard content -->
             </div>
             <!-- /content area -->
+<script type="text/javascript">
+    $(document).ready(function(){
 
+
+        $(document).on( "click", ".delete-row", function() {
+          let id = $( this ).next('p').text() ;
+          $('.confirm').attr('href','javascript:sdelete("admin/places/'+id+'")');
+          $(document).on("click", ".confirm", function(){
+            $('#exampleModal').modal('toggle');
+          })
+        });
+
+    })
+</script>
 
             <!-- Footer -->
             @include('admin.includes.footer')
@@ -174,4 +187,5 @@
         <!-- /main content -->
 
     </div>
+
 @endsection

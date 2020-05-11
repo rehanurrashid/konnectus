@@ -23,19 +23,15 @@ class PendingServiceController extends Controller
     {
         if($request->ajax()){
 
-            $service = $service->newQuery()->with(['user'])->withCount('rating')->where('status',0);
-
-            foreach ($service as $row) {
-
-                $rate = $row->rating()->avg('rate');
-                $rate = number_format((float)$rate, 1, '.', '');
-                $row->avg_rate = $rate;
-
-            }
+            $service = $service->newQuery()->with(['user'])->withCount('rating')->where('status',Null);
 
             return Datatables::of($service)
                 ->addColumn('action', function ($service) {
                     return view('admin.actions.actions_pending_service',compact('service'));
+                    })
+                ->addColumn('name', function ($service) {
+                    $token = 1;
+                    return view('admin.actions.actions_pending_service',compact('service','token'));
                     })
                 ->addColumn('user_name', function ($service) {
                     if($service->user != Null){
@@ -45,11 +41,17 @@ class PendingServiceController extends Controller
                             return 'No User';
                         }
                     })
-                ->addColumn('rate', function ($place) {
-                    return $place->avg_rate;
+                ->addColumn('status', function ($service) {
+                    if($service->status == Null){
+                        return 'Pending';
+                    }
                     })
-                ->addColumn('reviews', function ($place) {
-                    return $place->rating_count;
+                ->addColumn('rate', function ($service) {
+                    $rate = $service->rating->avg('rate');
+                    return $rate = number_format((float)$rate, 1, '.', '');
+                    })
+                ->addColumn('reviews', function ($service) {
+                    return $service->rating_count;
                     })
                 ->editColumn('id', 'ID: {{$id}}')
                 ->make(true);
@@ -142,7 +144,16 @@ class PendingServiceController extends Controller
     {
         $service = service::find($id);
 
+        if($request->status == 2){
+            $request->status = Null;
+        }
+
+        if($request->status == 1 || $request->status == 0){
+            $request->why_deny = Null;
+        }
+        
         $service->status = $request->status;
+        $service->why_deny = $request->why_deny;
         $service->save();
 
         if($service){

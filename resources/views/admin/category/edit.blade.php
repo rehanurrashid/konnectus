@@ -24,7 +24,6 @@
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>
     <script src="{{ asset('admin/js/demo_pages/dashboard.js') }}"></script>
-    <link href="{{ asset('admin/css/myvalidate.css') }}" rel="stylesheet" type="text/css">
 @endpush
 
 @section('content')
@@ -68,7 +67,7 @@
                                         </div>
                                         <div class="card-body">
                                             @if(isset($category))
-                                                {{ Form::model($category,['method'=>'post','route' => ['categories.store'] , 'class' => 'js-form', 'enctype' => 'multipart/form-data']) }}
+                                                {{ Form::model($category,['method'=>'put','route' => ['categories.update', $category->id] , 'class' => 'js-form', 'enctype' => 'multipart/form-data']) }}
                                             @else
                                                 {{ Form::open(['route' => 'categories.index' , 'class' => 'js-form', 'enctype' => 'multipart/form-data']) }} 
                                             @endif
@@ -114,7 +113,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         {{ Form::label('photo','User Image') }}<span style="color:red;">*</span>
-                                                        {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
+                                                        {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image' , 'data-validate-field' => 'photo')) }}
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
                                                         <p id="error1" style="display:none; color:#B81111;">
                                                         Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
@@ -212,9 +211,7 @@
             type:{
                 required:true
             },
-            photo:{
-                required:true
-            }
+
         },
         messages: {
             name: {
@@ -223,9 +220,7 @@
             type: {
                 required: 'Category type is required',
             },
-            photo: {
-                required: 'Category image is required',
-            },
+
         },
     });
 </script>

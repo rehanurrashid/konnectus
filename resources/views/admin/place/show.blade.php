@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Location Details')
+@section('title', 'Approved Location Details')
 
 @push('before-styles')
     <link href="{{ asset('admin/css/layout.min.css') }}" rel="stylesheet" type="text/css">
@@ -137,10 +137,19 @@
                                                 </div>
                                                 <div class="col">
                                                 	<h4>
-                                                		{{($place->status == 0) ? 'Disapproved' : 'Approved'}}
+                                                		Approved
                                                 		&nbsp; &nbsp; &nbsp;
                                                 		<a href="{{ route('places.edit', [$place->id]) }}" title="Change Status"><i class="icon-pencil5 mr-1 icon-1x"></i></a>
                                                 	</h4>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <h4 class="float-right">Spoken Languages: </h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>{{ (!empty($place->language_code)) ? $place->language_code : 'No Languages'}}</h4>
                                                 </div>
                                             </div>
                                             <hr>
@@ -158,11 +167,11 @@
                                                 	<h4 class="float-right">Image: </h4>
                                                 </div>
                                                 <div class="col">
-                                                	@if(!empty($place->image))
-													<img src="{{$place->image }}" alt="Location Image" width="30%" class="img-thumbnail">
-													@else
-													<h4>No Image</h4>
-                                                	@endif
+                                                	@forelse($place->photos as $photo)
+													<img src="{{$photo->photo }}" alt="Location Image" width="40%" class="img-thumbnail">
+													@empty
+													<h4>No Images Uploaded Yet!</h4>
+                                                	@endforelse
                                                 </div>
                                             </div>
                                         </div>

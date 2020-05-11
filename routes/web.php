@@ -55,10 +55,14 @@ Route::prefix('admin')->middleware(['auth:web','check.role:admin'])->group(funct
     Route::resource('posts', 'PostController');
   	Route::resource('categories','CategoryController');
   	Route::post('dependent/category','CategoryController@fetch')->name('dynamicdependent.fetch');
-  	Route::resource('services','ServiceController');
+  	
   	Route::resource('places','PlaceController');
   	Route::resource('pending_places','PendingPlaceController');
+    Route::resource('disapproved_places','DisapprovedPlaceController');
+    
+    Route::resource('services','ServiceController');
   	Route::resource('pending_services','PendingServiceController');
+    Route::resource('disapproved_services','DisapprovedServiceController');
 });
 
 // Front end User Side Routes

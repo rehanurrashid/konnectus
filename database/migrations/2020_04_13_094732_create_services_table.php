@@ -24,12 +24,13 @@ class CreateServicesTable extends Migration
             $table->string('phone',255);
             $table->string('longitude',255);
             $table->string('latitude',255);
-            $table->boolean('status',1)->default(0);
+            $table->boolean('status',1)->nullable();
             $table->text('tags')->nullable();
             $table->string('from_time',255);
             $table->string('to_time',255);
             $table->string('country_code',255);
             $table->string('language_code',255);
+            $table->text('why_deny')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

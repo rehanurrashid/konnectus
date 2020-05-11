@@ -158,7 +158,20 @@
                 <!-- /dashboard content -->
             </div>
             <!-- /content area -->
+<script type="text/javascript">
+    $(document).ready(function(){
 
+
+        $(document).on( "click", ".delete-row", function() {
+          let id = $( this ).next('p').text() ;
+          $('.confirm').attr('href','javascript:sdelete("admin/users/'+id+'")');
+          $(document).on("click", ".confirm", function(){
+            $('#exampleModal').modal('toggle');
+          })
+        });
+
+    })
+</script>
 
             <!-- Footer -->
             @include('admin.includes.footer')

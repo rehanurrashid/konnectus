@@ -14,7 +14,7 @@ class Place extends Model
 {
 	use SoftDeletes;
 
-    protected $fillable = ['user_id', 'slug', 'category_id','name','tags','phone','address','longitude','latitude','from_time','to_time','country_code'];
+    protected $fillable = ['user_id', 'slug', 'category_id','name','tags','phone','address','longitude','latitude','from_time','to_time','country_code','why_deny'];
 
 	protected $guard = [];
 

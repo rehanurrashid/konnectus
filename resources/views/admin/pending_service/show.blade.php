@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Service Details')
+@section('title', 'Pending Service Details')
 
 @push('before-styles')
     <link href="{{ asset('admin/css/layout.min.css') }}" rel="stylesheet" type="text/css">
@@ -118,9 +118,9 @@
                                                 </div>
                                                 <div class="col">
                                                 	<h4>
-                                                		{{($service->status == 0) ? 'Disapproved' : 'Approved'}}
+                                                		Pending
                                                 		&nbsp; &nbsp; &nbsp;
-                                                		<a href="{{ route('services.edit', [$service->id]) }}" title="Change Status"><i class="icon-pencil5 mr-1 icon-1x"></i></a>
+                                                		<a href="{{ route('pending_services.edit', [$service->id]) }}" title="Change Status"><i class="icon-pencil5 mr-1 icon-1x"></i></a>
                                                 	</h4>
                                                 </div>
                                             </div>
@@ -145,6 +145,15 @@
                                             <hr>
                                             <div class="row">
                                                 <div class="col-md-3">
+                                                    <h4 class="float-right">Spoken Languages: </h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>{{ (!empty($place->language_code)) ? $place->language_code : 'No Languages'}}</h4>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-3">
                                                 	<h4 class="float-right">Tags: </h4>
                                                 </div>
                                                 <div class="col">
@@ -154,14 +163,14 @@
                                             <hr>
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                	<h4 class="float-right">Image: </h4>
+                                                    <h4 class="float-right">Image: </h4>
                                                 </div>
                                                 <div class="col">
-                                                	@if(!empty($service->image))
-													<img src="{{$service->image }}" alt="Service Image" width="30%" class="img-thumbnail">
-													@else
-													<h4>No Image</h4>
-                                                	@endif
+                                                    @forelse($service->photos as $photo)
+                                                    <img src="{{$photo->photo }}" alt="Location Image" width="40%" class="img-thumbnail">
+                                                    @empty
+                                                    <h4>No Images Uploaded Yet!</h4>
+                                                    @endforelse
                                                 </div>
                                             </div>
                                         </div>

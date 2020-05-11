@@ -31,6 +31,9 @@
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>
     <script src="{{ asset('admin/js/demo_pages/dashboard.js') }}"></script>
+    <link href="node_modules/@pnotify/core/dist/PNotify.css" rel="stylesheet" type="text/css" />
+<link href="node_modules/@pnotify/mobile/dist/PNotifyMobile.css" rel="stylesheet" type="text/css" />
+
 @endpush
 
 @section('content')

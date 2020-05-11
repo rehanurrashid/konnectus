@@ -24,7 +24,6 @@
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>
     <script src="{{ asset('admin/js/demo_pages/dashboard.js') }}"></script>
-    <link href="{{ asset('admin/css/myvalidate.css') }}" rel="stylesheet" type="text/css">
 @endpush
 
 @section('content')
@@ -114,7 +113,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         {{ Form::label('photo','User Image') }}<span style="color:red;">*</span>
-                                                        {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image')) }}
+                                                        {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image', 'data-validate-field' => 'photo')) }}
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
                                                         <p id="error1" style="display:none; color:#B81111;">
                                                         Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
@@ -128,7 +127,7 @@
                                             <div class="d-flex justify-content-end align-items-center">
                                                 <button type="submit"  class="btn bg-blue ml-3">Save </button>
                                             </div>
-                                            {{ csrf_field() }}
+
                                             {{ Form::close() }}
                                         </div>
                                     </div>

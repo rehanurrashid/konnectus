@@ -32,13 +32,10 @@ class UserController extends Controller
                 ->addColumn('action', function ($user) {
                     return view('admin.actions.actions_user',compact('user'));
                     })
-                // ->addColumn('phone', function ($user) {
-                //     if($user->profile->phone != Null){
-                //             return $user->profile->phone;
-                //         }else{
-                //             return '<b>No Phone Number Yet!</b>';
-                //         }
-                //     })
+                ->addColumn('name', function ($user) {
+                    $token = 1;
+                    return view('admin.actions.actions_user',compact('user','token'));
+                    })
                 ->addColumn('verification', function ($user) {
                         if($user->phone_verified_at != Null){
                             return '<b>Verified at: </b>'.$user->phone_verified_at;
@@ -47,7 +44,7 @@ class UserController extends Controller
                         }
                     })
                 ->editColumn('id', 'ID: {{$id}}')
-                ->rawColumns(['verification'])
+                ->rawColumns(['verification','name'])
                 ->make(true);
         }
        return view('admin.user.index');
@@ -125,7 +122,6 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::with(['profile'])->where('id',$id)->first();
-
         return view('admin.user.show', compact('user'));
     }
 

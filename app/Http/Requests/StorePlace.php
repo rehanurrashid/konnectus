@@ -28,7 +28,7 @@ class StorePlace extends FormRequest
             'address' => 'bail|required',
             'longitude' => 'bail|required',
             'latitude' => 'bail|required',
-            'phone' => 'bail|required',
+            'phone' => 'bail|required|unique:places',
             'user_id' => 'bail|required',
             'category_id' => 'bail|required',
             'from_time' => 'bail|required',

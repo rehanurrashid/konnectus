@@ -28,11 +28,15 @@
     <!-- tags input css -->
     <link href="{{ asset('admin/css/tagsinput.css') }}" rel="stylesheet" type="text/css">
     
-    <style type="text/css">
+     <style type="text/css">
         .bootstrap-tagsinput .badge {
             margin: 3px 6px;
             padding: 5px 8px;
-            font-size: 16px;
+            font-size:16px;
+        }
+        .language_code .badge-info{
+            color: #fff;
+    background-color: #123b40;
         }
     </style>
 
@@ -182,6 +186,15 @@
                                                         {{ Form::label('to_time','Available To Time') }}<span style="color:red;">*</span>
                                                         {{ Form::text('to_time',old('to_time'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Availabilty To Time' , 'data-validate-field' => 'to_time')) }}
                                                         {!! $errors->first('to_time', '<label id="to_time-error" class="error" for="to_time">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                             <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group language_code">
+                                                        {{ Form::label('language_code','Language Code') }}<span >(Optional)</span>
+                                                        {{ Form::text('language_code',old('language_code'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Spoken Language Code', 'data-role' => 'tagsinput' )) }}
+                                                        {!! $errors->first('language_code', '<label id="language_code-error" class="error" for="language_code">:message</label>') !!}
                                                     </div>
                                                 </div>
                                             </div>

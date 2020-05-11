@@ -29,6 +29,10 @@ class PostController extends Controller
                 // ->addColumn('user_name', function ($post) {
                 //     return $post->user->name;
                 //     })
+                ->addColumn('topic', function ($post) {
+                    $token = 1;
+                    return view('admin.actions.actions_post',compact('post','token'));
+                    })
                 ->addColumn('image', function ($post) {
                         if($post->image != Null){
                             return '<img src="'.$post->image.'" width="50%" class="img-thumbnail">';
@@ -38,7 +42,7 @@ class PostController extends Controller
                         }
                     })
                 ->editColumn('id', 'ID: {{$id}}')
-                ->rawColumns(['image'])
+                ->rawColumns(['image','topic'])
                 ->make(true);
         }
        return view('admin.post.index');

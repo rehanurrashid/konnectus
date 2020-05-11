@@ -13,23 +13,20 @@ use App\User;
 
 class PendingPlaceController extends Controller
 {
-    public function index(Request $request,Place $place)
+    public function index(Request $request, Place $place)
     {
         if($request->ajax()){
 
-            $place = $place->newQuery()->with(['user'])->where('status',0)->withCount('rating');
+            $place = $place->newQuery()->with(['user','rating'])->where('status',Null)->withCount('rating');
+
             // dd($place);
-             foreach ($place as $row) {
-
-                $rate = $row->rating()->avg('rate');
-                $rate = number_format((float)$rate, 1, '.', '');
-                $row->avg_rate = $rate;
-
-            }
-
             return Datatables::of($place)
-                ->addColumn('action', function ($place) {
+                ->addColumn('action', function (Place $place) {
                     return view('admin.actions.actions_pending_place',compact('place'));
+                    })
+                ->addColumn('name', function ($place) {
+                    $token = 1;
+                    return view('admin.actions.actions_pending_place',compact('place','token'));
                     })
                 ->addColumn('user_name', function ($place) {
                         if($place->user != Null){
@@ -39,8 +36,16 @@ class PendingPlaceController extends Controller
                             return 'No User';
                         }
                     })
+                ->addColumn('status', function (Place $place) {
+                    if($place->status == Null){
+                        return 'Pending';
+                    }
+                    })
                 ->addColumn('rate', function ($place) {
-                    return $place->avg_rate;
+
+                    $rate = $place->rating->avg('rate');
+                    return $rate = number_format((float)$rate, 1, '.', '');
+
                     })
                 ->addColumn('reviews', function ($place) {
                     return $place->rating_count;
@@ -140,7 +145,16 @@ class PendingPlaceController extends Controller
     {
         $place = Place::find($id);
 
+        if($request->status == 2){
+            $request->status = Null;
+        }
+
+        if($request->status == 1 || $request->status == 0){
+            $request->why_deny = Null;
+        }
+        
         $place->status = $request->status;
+        $place->why_deny = $request->why_deny;
         $place->save();
 
         if($place){

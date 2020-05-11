@@ -28,38 +28,6 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('services.index') }}" class="nav-link {{Request::is(['services','services/*']) ? 'active' : ''}}">
-                <i class="fa fa-archive" aria-hidden="true"></i>
-                <span>
-                    All Services Management
-                </span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('pending_services.index') }}" class="nav-link {{Request::is(['pending_services','pending_services/*']) ? 'active' : ''}}">
-                <i class="fa fa-clock-o" aria-hidden="true"></i>
-                <span>
-                    Pending Services Management
-                </span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('places.index') }}" class="nav-link {{Request::is(['places','places/*']) ? 'active' : ''}}">
-                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                <span>
-                    All Places Management
-                </span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('pending_places.index') }}" class="nav-link {{Request::is(['pending_places','pending_places/*']) ? 'active' : ''}}">
-                <i class="fa fa-clock-o" aria-hidden="true"></i>
-                <span>
-                    Pending Places Management
-                </span>
-            </a>
-        </li>
-        <li class="nav-item">
             <a href="{{ route('categories.index') }}" class="nav-link {{Request::is(['categories','categories/*']) ? 'active' : ''}}">
                 <i class="fa fa-list-alt" aria-hidden="true"></i>
                 <span>
@@ -67,5 +35,56 @@
                 </span>
             </a>
         </li>
+        <br>
+        <li class="nav-item">
+            <a href="{{ route('services.index') }}" class="nav-link {{Request::is(['services','services/*']) ? 'active' : ''}}">
+                <i class="fas fa-check"></i>
+                <span>
+                    Approved Services
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('pending_services.index') }}" class="nav-link {{Request::is(['pending_services','pending_services/*']) ? 'active' : ''}}">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span>
+                    Pending Services
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('disapproved_services.index') }}" class="nav-link {{Request::is(['disapproved_services','disapproved_services/*']) ? 'active' : ''}}">
+                <i class="fa fa-ban" aria-hidden="true"></i>
+                <span>
+                    Denied Services
+                </span>
+            </a>
+        </li>
+        <br>
+        <li class="nav-item">
+            <a href="{{ route('places.index') }}" class="nav-link {{Request::is(['places','places/*']) ? 'active' : ''}}">
+                <i class="fas fa-check"></i>
+                <span>
+                    Approved Places
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('pending_places.index') }}" class="nav-link {{Request::is(['pending_places','pending_places/*']) ? 'active' : ''}}">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span>
+                    Pending Places
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('disapproved_places.index') }}" class="nav-link {{Request::is(['disapproved_places','disapproved_places/*']) ? 'active' : ''}}">
+                <i class="fa fa-ban" aria-hidden="true"></i>
+                <span>
+                    Denied Places
+                </span>
+            </a>
+        </li>
+        
     </ul>
 </div>
