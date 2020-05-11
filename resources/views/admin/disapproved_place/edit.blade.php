@@ -82,17 +82,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row d-none" id="why_deny">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        {{ Form::label('why_deny','Why you want to disapproved/reject this request?') }}<span style="color:red;">* (Admin note)</span>
-                                                        {{ Form::textarea('why_deny',old('why_deny'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Why you want to disapproved/reject this request?')) }}
-                                                        {!! $errors->first('why_deny', '<label id="why_deny-error" class="error" for="why_deny">:message</label>') !!}
-
-                                                        <p style="color: #B81111" id="error-reason" class="d-none ml-3">Reason to deny request is required!</p>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div class="d-flex justify-content-end align-items-center">
                                                 <button type="submit" class="btn bg-blue ml-3">{{(isset($place)) ? 'Update' : 'Save'}} </button>
                                             </div>
@@ -127,30 +116,6 @@ $(document).ready(function(){
      // searchable dropdown
     $('.select2').select2();
 
-    $("select.status").change(function(){
-
-    var selectedType = $(this).children("option:selected").text();
-        
-    if(selectedType == 'Denied'){
-        $('#why_deny').removeClass('d-none');
-    }
-    else{
-        $('#why_deny').addClass('d-none');
-    }
-
-    });
-
-    $('button[type="submit"]').click(function(e){
-
-        e.preventDefault();
-
-        if($('textarea[name="why_deny"]').val() == ''){
-            $('#error-reason').removeClass('d-none')
-        }
-        else{
-            $('.js-form').submit();
-        }
-    })
 })
 </script>
 @endsection

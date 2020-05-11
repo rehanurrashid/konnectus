@@ -149,12 +149,7 @@ class DisapprovedPlaceController extends Controller
             $request->status = Null;
         }
 
-        if($request->status == 1 || $request->status == 0){
-            $request->why_deny = Null;
-        }
-
         $place->status = $request->status;
-        $place->why_deny = $request->why_deny;
         $place->save();
 
         if($place){

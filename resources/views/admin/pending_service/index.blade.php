@@ -68,6 +68,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row note-message d-none">
+                            <div class="col-lg-12">
+                                <div>
+                                    <p class="alert alert-success">Note Added Successfully!</p>
+                                </div>
+                            </div>
+                        </div>
                         <br>
                         <div class="row">
                             <div class="col-lg-12">
@@ -165,6 +172,79 @@
           })
         });
 
+            // Add the notes
+
+    var host = "{{URL::to('/')}}";
+    var service_id = '';
+    var notes = '';
+
+    $(document).on('click', '.open-note-modal', function(){
+
+       let service_id = $( this ).parents('div.btn-group').find('p.service-id').text();
+
+       let notes = $( this ).parents('div.btn-group').find('p.notes').text();
+
+       $('#service-id-modal').text(service_id)
+
+       if(notes != ''){
+
+        $('.note-title').text('Update Note')
+        $('.submit-note').text('Update Note')
+        $('#notes').val(notes)
+
+       }
+       else{
+
+        $('.note-title').text('Add Note')
+        $('.submit-note').text('Add Note')
+        $('#notes').val(notes)
+       }
+
+    });
+
+    $(document).on('click', '.submit-note', function(event){
+        event.preventDefault();
+
+        var notes = $('#notes').val();
+        let service_id = $('#service-id-modal').text();
+
+        if(notes == ''){
+
+            $('#notes-error').removeClass('d-none');
+            $('#notes').css("border","1px solid #D75A4A");//more efficient
+        }
+        else{
+            // alert(service_id);
+
+            $.ajax({
+               type: "POST",
+               url: '{{route("add.service.note")}}',
+               data: {"_token": "{{ csrf_token() }}", service_id:service_id, notes:notes},
+               success: function( response ) {
+
+                console.log(response)
+                  if(response.status == true){
+
+                    var table = $('#rtable').DataTable();
+ 
+                    table.ajax.reload( function ( json ) {
+                        return true;
+                    } );
+
+                    $('#notesModal').modal('toggle');
+                    $('.note-message').removeClass('d-none')
+                  }
+
+               },
+               error: function(response){
+
+                console.log(response)
+
+               }
+           });
+        }
+
+    })
     })
 </script>
 

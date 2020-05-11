@@ -157,12 +157,7 @@ class ServiceController extends Controller
             $request->status = Null;
         }
         
-        if($request->status == 1 || $request->status == 0){
-            $request->why_deny = Null;
-        }
-        
         $service->status = $request->status;
-        $service->why_deny = $request->why_deny;
         $service->save();
 
         if($service){
@@ -183,6 +178,21 @@ class ServiceController extends Controller
         $service = Service::find($id)->delete();
         if($service){
             return view('admin.service.index');
+        }
+    }
+
+    public function add_note(Request $request){
+
+        $service = Service::find($request->service_id);
+        
+        $service->notes = $request->notes;
+        $service->save();
+
+        if($service){
+            return response(['status' => true], 200);
+        }
+        else{
+            return response(['status' => false], 200);
         }
     }
 }

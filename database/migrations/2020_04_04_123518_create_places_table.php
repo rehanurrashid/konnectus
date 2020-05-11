@@ -30,7 +30,7 @@ class CreatePlacesTable extends Migration
             $table->string('to_time',255);
             $table->string('country_code',255);
             $table->string('language_code',255);
-            $table->text('why_deny')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

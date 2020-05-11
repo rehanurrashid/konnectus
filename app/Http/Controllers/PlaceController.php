@@ -165,12 +165,7 @@ class PlaceController extends Controller
             $request->status = Null;
         }
         
-        if($request->status == 1 || $request->status == 0){
-            $request->why_deny = Null;
-        }
-        
         $place->status = $request->status;
-        $place->why_deny = $request->why_deny;
         $place->save();
 
         if($place){
@@ -191,6 +186,21 @@ class PlaceController extends Controller
         $place = Place::find($id)->delete();
         if($place){
             return view('admin.place.index');
+        }
+    }
+
+    public function add_note(Request $request){
+
+        $place = Place::find($request->place_id);
+        
+        $place->notes = $request->notes;
+        $place->save();
+
+        if($place){
+            return response(['status' => true], 200);
+        }
+        else{
+            return response(['status' => false], 200);
         }
     }
 }

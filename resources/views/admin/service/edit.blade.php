@@ -127,30 +127,7 @@ $(document).ready(function(){
      // searchable dropdown
     $('.select2').select2();
 
-    $("select.status").change(function(){
 
-    var selectedType = $(this).children("option:selected").text();
-        
-    if(selectedType == 'Denied'){
-        $('#why_deny').removeClass('d-none');
-    }
-    else{
-        $('#why_deny').addClass('d-none');
-    }
-
-    });
-
-    $('button[type="submit"]').click(function(e){
-
-        e.preventDefault();
-
-        if($('textarea[name="why_deny"]').val() == ''){
-            $('#error-reason').removeClass('d-none')
-        }
-        else{
-            $('.js-form').submit();
-        }
-    })
 })
 </script>
 @endsection

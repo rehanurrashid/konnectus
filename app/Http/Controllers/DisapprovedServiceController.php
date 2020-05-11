@@ -157,12 +157,8 @@ class DisapprovedServiceController extends Controller
             $request->status = Null;
         }
 
-        if($request->status == 1 || $request->status == 0){
-            $request->why_deny = Null;
-        }
         
         $service->status = $request->status;
-        $service->why_deny = $request->why_deny;
         $service->save();
 
         if($service){

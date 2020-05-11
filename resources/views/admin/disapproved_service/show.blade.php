@@ -125,14 +125,14 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                            <div class="row">
+                                            <!-- <div class="row">
                                                 <div class="col-md-3">
                                                     <h4 class="float-right">Why you deny this request: </h4>
                                                 </div>
                                                 <div class="col">
                                                     <h4>{{ (!empty($service->why_deny)) ? $service->why_deny : 'No Reason Yet!'}}</h4>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <hr>
                                             <div class="row">
                                                 <div class="col-md-3">

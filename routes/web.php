@@ -57,10 +57,15 @@ Route::prefix('admin')->middleware(['auth:web','check.role:admin'])->group(funct
   	Route::post('dependent/category','CategoryController@fetch')->name('dynamicdependent.fetch');
   	
   	Route::resource('places','PlaceController');
+    Route::post('add/place/notes','PlaceController@add_note')->name('add.place.note');
+
   	Route::resource('pending_places','PendingPlaceController');
     Route::resource('disapproved_places','DisapprovedPlaceController');
     
+
     Route::resource('services','ServiceController');
+    Route::post('add/service/notes','ServiceController@add_note')->name('add.service.note');
+    
   	Route::resource('pending_services','PendingServiceController');
     Route::resource('disapproved_services','DisapprovedServiceController');
 });
