@@ -121,7 +121,7 @@
                                                         {{ Form::label('gender','Choose Gender') }}<span style="color:blue;"> &nbsp; (optional)</span>
 
                                                         <select name="gender" class="form-control">
-                                                            <option selected>Choose Gender</option>
+                                                            <option value="">Choose Gender</option>
                                                             <option value="male">Male</option>
                                                             <option value="female">Female</option>
                                                             <option value="other">Other</option>

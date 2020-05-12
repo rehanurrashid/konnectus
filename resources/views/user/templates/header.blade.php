@@ -1,5 +1,5 @@
 <section class="nav-b-section">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light p-2">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light p-2 ">
       <div class="container">
         <a class="navbar-brand" href="{{route('home')}}"><img src="{{asset('images/LogoMap.png')}}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

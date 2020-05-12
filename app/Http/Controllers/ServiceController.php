@@ -189,7 +189,7 @@ class ServiceController extends Controller
         $service->save();
 
         if($service){
-            return response(['status' => true], 200);
+            return response(['status' => true,'data' => $service], 200);
         }
         else{
             return response(['status' => false], 200);

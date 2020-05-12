@@ -28,9 +28,9 @@ class StoreUser extends FormRequest
             'username' => 'bail|required|unique:users,username,'.auth()->user()->id,
             'email' => 'bail|required|unique:users,email,'.auth()->user()->id,
             'phone' => 'required|unique:user_profiles,phone,'.auth()->user()->id.',user_id',
-            'address' => 'bail|required',
-            'city' => 'bail|required|alpha_dash ',
-            'country' => 'bail|required|alpha_dash',
+            // 'address' => 'bail|required',
+            // 'city' => 'bail|required|alpha_dash ',
+            // 'country' => 'bail|required|alpha_dash',
             // 'photo' => 'bail|required|image|mimes:jpeg,png,jpg,gif,svg',
         ];
     }

@@ -19,7 +19,7 @@ class PlaceController extends Controller
             'name' => 'required', 
             'category_id' => 'required',
             'language_code' => 'required',
-            'phone' => 'required', 
+            'phone' => 'required|unique:places', 
             'longitude' => 'required',
             'latitude' => 'required',
             'image' => 'required',

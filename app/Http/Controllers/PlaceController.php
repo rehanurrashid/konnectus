@@ -197,7 +197,7 @@ class PlaceController extends Controller
         $place->save();
 
         if($place){
-            return response(['status' => true], 200);
+            return response(['status' => true,'data' => $place], 200);
         }
         else{
             return response(['status' => false], 200);

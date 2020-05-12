@@ -18,9 +18,9 @@
       </div>
       <div class="col-md-2 ">
         <h5 class="text-white foot-link foot-marg">Download Links</h5>
-        <img class="img-ffoter" src="{{asset('images/app store.png')}}">
+        <img class="img-ffoter" src="{{asset('images/google.png')}}">
         <br>
-        <img class="img-ffoter" src="{{asset('images/play store.png')}}">
+        <img class="img-ffoter" src="{{asset('images/apple.png')}}">
       </div>
     </div>
   </div>

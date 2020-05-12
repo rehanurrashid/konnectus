@@ -46,7 +46,13 @@
 
             <!-- Content area -->
             <div class="content">
-
+                <div class="row note-message d-none">
+                    <div class="col-lg-12">
+                        <div>
+                            <p class="alert alert-success">Note Added Successfully!</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Dashboard content -->
                 <div class="row">
@@ -69,10 +75,13 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                	<h4 class="float-right">User Name: </h4>
+                                                    <h4 class="float-right">User Name: </h4>
                                                 </div>
                                                 <div class="col">
-                                                	<h4>{{$service->user->name}}</h4>
+                                                    <h4 class="d-inline">{{$service->user->name}}</h4>
+                                                    <img data-toggle="modal" data-target="#notesModal"  src="{{asset('images/note.jpg')}}" width="8%" class="float-right mr-4 open-note-modal" style="cursor: pointer;">
+                                                    <p class="notes d-none">{!!$service->notes!!}</p>
+                                                    <p class="service-id d-none" >{!!$service->id!!}</p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -188,6 +197,80 @@
             <!-- /content area -->
 
 
+<script type="text/javascript">
+    $(document).ready(function(){
+
+    // Add the notes
+
+    var service_id = '';
+    var notes = '';
+
+    $(document).on('click', '.open-note-modal', function(){
+
+       let service_id = $( this ).parents('div').find('p.service-id').text();
+
+       let notes = $( this ).parents('div').find('p.notes').text();
+
+       $('#service-id-modal').text(service_id)
+
+       if(notes != ''){
+
+        $('.note-title').text('Update Note')
+        $('.submit-note').text('Update Note')
+        $('#notes').val(notes)
+
+       }
+       else{
+
+        $('.note-title').text('Add Note')
+        $('.submit-note').text('Add Note')
+        $('#notes').val(notes)
+       }
+
+    });
+
+    $(document).on('click', '.submit-note', function(event){
+        event.preventDefault();
+
+        var notes = $('#notes').val();
+        let service_id = $('#service-id-modal').text();
+
+        if(notes == ''){
+
+            $('#notes-error').removeClass('d-none');
+            $('#notes').css("border","1px solid #D75A4A");//more efficient
+        }
+        else{
+            // alert(service_id);
+
+            $.ajax({
+               type: "POST",
+               url: '{{route("add.service.note")}}',
+               data: {"_token": "{{ csrf_token() }}", service_id:service_id, notes:notes},
+               success: function( response ) {
+
+                
+                  if(response.status == true){
+
+                    $('p.notes').text(response.data.notes);
+
+                    $('#notesModal').modal('toggle');
+                    $('.note-message').removeClass('d-none')
+                  }
+
+               },
+               error: function(response){
+
+                console.log(response)
+
+               }
+           });
+        }
+
+    })
+
+    })
+</script>
             <!-- Footer -->
             @include('admin.includes.footer')
             <!-- /footer -->
@@ -196,5 +279,31 @@
         <!-- /main content -->
 
     </div>
+<!-- Add Notes Modal -->
+<div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title note-title" id="exampleModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <textarea name="notes" id="notes" class="form-control" rows="4" cols="50" placeholder="Write here..."></textarea>
+        <label id="notes-error" class="d-none ml-1"  style="color: #D75A4A">
+          <strong>Notes field must be filled!</strong>
+        </label>
+        <p id="service-id-modal" class="d-none"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a  href="" class="btn btn-danger submit-note">
+          
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
 @endsection

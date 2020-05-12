@@ -73,10 +73,11 @@ class UserController extends Controller
             $request['picture'] = $request->file('photo')->store('public/storage');
             $request['picture'] = Storage::url($request['picture']);
             $request['picture'] = asset($request['picture']);
-            $filename = $request->file('photo')->hashName();
+            // $filename = $request->file('photo')->hashName();
+            $file_path = $request['picture']; 
         }
         else{
-            $filename = 'profileavatar.png';
+            $file_path = asset('images/profileavatar.png');
         }
         
         $password = Str::random(8);
@@ -99,7 +100,7 @@ class UserController extends Controller
                 'city'  => $request->city,
                 'country'   => $request->country,
                 'phone' =>  $request->phone,
-                'photo' => $filename,
+                'photo' => $file_path,
                 'dob' => $request->dob,
                 'gender' => $request->gender,
             ]);
@@ -151,6 +152,7 @@ class UserController extends Controller
         $hash_password = Hash::make($password);
 
         $user = User::find($id);
+        $profile = UserProfile::where('user_id' ,$id)->first();
 
         if($request->hasFile('photo')){
             // storing image
@@ -158,11 +160,9 @@ class UserController extends Controller
             $request['picture'] = $request->file('photo')->store('public/storage');
             $request['picture'] = Storage::url($request['picture']);
             $request['picture'] = asset($request['picture']);
-            $filename = $request->file('photo')->hashName();
-
-        }
-        else{
-            $filename = $user->profile->image;
+            // $filename = $request->file('photo')->hashName();
+            
+            $profile->photo     = $request['picture'];
         } 
         
         $user->name = $request->name;
@@ -176,13 +176,10 @@ class UserController extends Controller
 
         if($user){
 
-            $profile = UserProfile::where('user_id' ,$id)->first();
-
                 $profile->address   = $request->address;
                 $profile->city      = $request->city;
                 $profile->country   = $request->country;
                 $profile->phone     = $request->phone;
-                $profile->photo     = $filename;
                 $profile->dob     =  $request->dob;
                 $profile->gender     =  $request->gender;
                 $profile->save();

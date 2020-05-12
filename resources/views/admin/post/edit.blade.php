@@ -139,13 +139,16 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         {{ Form::label('description','Post Description') }}<span style="color:red;">*</span>
-                                                        {{ Form::textarea('description',old('description'),array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Enter Post Description', 'id' => 'summernote' ,'data-validate-field' => 'description')) }}
+
+                                                        <textarea class="form-control" style="margin-bottom:10px;" name="description" placeholder="Write here..." data-validate-field="description" id="summernote"></textarea>
+
                                                         {!! $errors->first('description', '<label id="description-error" class="error" for="description">:message</label>') !!}
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="d-flex justify-content-end align-items-center">
-                                                <button type="submit" name="submit" class="btn bg-blue ml-3">{{(isset($post)) ? 'Update' : 'Save'}} </button>
+                                                <button type="submit" class="btn bg-blue ml-3">{{(isset($post)) ? 'Update' : 'Save'}} </button>
                                             </div>
 
                                             {{ Form::close() }}
@@ -186,10 +189,14 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        $('#summernote').val(`{!!$post->description!!}`);
         $('#summernote').summernote({
             height: '300px',
             placeholder: 'Content here...'
         });
+
+        let description = $('#summernote_description').text();
+        
     })
 </script>
 

@@ -33,61 +33,42 @@
         </div>
         <div class="col-md-4 p-3">
           <h4 class="text-capitalize mb-4">Popular posts</h4>
+        @forelse($popular_posts as $post)
           <div class="row pb-4">
             <div class="col-md-2 p-0 m-0">
-              <img class="blg-img" src="{{asset('images/Group 66.png')}}">
+              <img class="blg-img rounded-circle" src="{{$post->image}}" width="72px" height="72px">
             </div>
             <div class="col-md-10 ">
-              <h6> Lorem ipsum is simply dummy text of the printing</h6>
-              <span class="text-teal">july 22, 2015 __________</span>
+              <a href="{{ route('single', [$post->slug]) }}" target="_blank" style="color: #212529;"><h6> {{$post->topic}}</h6></a>
+              <span class="text-teal">{{$post->posted_on}} __________</span>
             </div>
           </div>
+        @empty
           <div class="row pb-4">
-            <div class="col-md-2 p-0 m-0">
-              <img class="blg-img" src="{{asset('images/Group 66.png')}}">
-            </div>
-            <div class="col-md-10 ">
-              <h6> Lorem ipsum is simply dummy text of the printing</h6>
-              <span class="text-teal">july 22, 2015 __________</span>
+            <div class="col text-center">
+              <h5 >No Popular Posts!</h5>
             </div>
           </div>
-          <div class="row pb-4">
-            <div class="col-md-2 p-0 m-0">
-              <img class="blg-img" src="{{asset('images/Group 66.png')}}">
-            </div>
-            <div class="col-md-10 ">
-              <h6> Lorem ipsum is simply dummy text of the printing</h6>
-              <span class="text-teal">july 22, 2015 __________</span>
-            </div>
-          </div>
+        @endforelse
+
           <h4 class="text-capitalize pb-4 ">Recent post</h4>
+        @forelse($recent_posts as $post)
           <div class="row pb-4">
             <div class="col-md-2 p-0 m-0">
-              <img class="blg-img" src="{{asset('images/Group 66.png')}}">
+              <img class="blg-img rounded-circle" src="{{$post->image}}" width="72px" height="72px">
             </div>
             <div class="col-md-10 ">
-              <h6> Lorem ipsum is simply dummy text of the printing</h6>
-              <span class="text-teal">july 22, 2015 __________</span>
+              <a href="{{ route('single', [$post->slug]) }}" target="_blank" style="color: #212529;"><h6> {{$post->topic}}</h6></a>
+              <span class="text-teal">{{$post->posted_on}} __________</span>
             </div>
           </div>
+        @empty
           <div class="row pb-4">
-            <div class="col-md-2 p-0 m-0">
-              <img class="blg-img" src="{{asset('images/Group 66.png')}}">
-            </div>
-            <div class="col-md-10 ">
-              <h6> Lorem ipsum is simply dummy text of the printing</h6>
-              <span class="text-teal">july 22, 2015 __________</span>
+            <div class="col text-center">
+              <h5 >No Recent Posts!</h5>
             </div>
           </div>
-          <div class="row pb-4">
-            <div class="col-md-2 p-0 m-0">
-              <img class="blg-img" src="{{asset('images/Group 66.png')}}">
-            </div>
-            <div class="col-md-10 ">
-              <h6> Lorem ipsum is simply dummy text of the printing</h6>
-              <span class="text-teal">july 22, 2015 __________</span>
-            </div>
-          </div>
+        @endforelse
           <div class="fancy-div-2" style="background-color: #F5F5F5; width: 100%; height: 17rem; margin-top: 2rem;">
             <h6 class="text-capitalize text-muted text-center pt-3">Follows us</h6>
             <h6 class="text-capitalize text-muted text-center pt-3">News letter</h6>

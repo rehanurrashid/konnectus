@@ -121,7 +121,7 @@
                                                         {{ Form::label('gender','Choose Gender') }}<span style="color:blue;"> &nbsp; (optional)</span>
 
                                                         <select name="gender" class="form-control">
-                                                            <option selected>Choose Gender</option>
+                                                            <option value="">Choose Gender</option>
                                                             <option value="male">Male</option>
                                                             <option value="female">Female</option>
                                                             <option value="other">Other</option>
@@ -138,7 +138,7 @@
 
                                                         <input type="text" name="country" placeholder="Enter Country"  style="margin-bottom:10px;" id="country" class="form-control" value="{{old('country')}}">
 
-                                                        {!! $errors->first('city', '<label id="city-error" class="error" for="city">:message</label>') !!}
+                                                        {!! $errors->first('country', '<label id="country-error" class="error" for="country">:message</label>') !!}
                                                     </div>
                                                 </div>
                                                 <div class="col">

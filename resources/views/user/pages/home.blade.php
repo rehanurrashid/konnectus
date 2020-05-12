@@ -15,8 +15,8 @@
             <p class="text-white mb-4">Lorem ipsum has been the industry'sstandard dummy <br>
             text ever since the 1500s, when an unknown printer.</p>
             <div class="row container">
-             <img class="app-img-1" src="{{asset('images/app store.png')}}">
-             <img class="app-img-2" src="{{asset('images/play store.png')}}">
+             <img class="app-img-1" src="{{asset('images/google.png')}}">
+             <img class="app-img-2" src="{{asset('images/apple.png')}}">
            </div>
          </div>
        </div>

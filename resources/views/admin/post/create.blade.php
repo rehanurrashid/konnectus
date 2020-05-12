@@ -146,7 +146,7 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-end align-items-center">
-                                                <button type="submit" name="submit" class="btn bg-blue ml-3">{{(isset($post)) ? 'Update' : 'Save'}} </button>
+                                                <button type="submit" class="btn bg-blue ml-3">{{(isset($post)) ? 'Update' : 'Save'}} </button>
                                             </div>
 
                                             {{ Form::close() }}

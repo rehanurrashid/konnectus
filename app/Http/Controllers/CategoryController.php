@@ -27,7 +27,7 @@ class CategoryController extends Controller
                     return view('admin.actions.actions_category',compact('category'));
                     })
                 ->addColumn('image', function($category) {
-                    return '<img src="'.$category->image.'" width="40%">';
+                    return '<img src="'.$category->image.'" width="20%">';
                     })
                 ->addColumn('parent_name', function($category) {
                         if($category->parent_id == Null){
