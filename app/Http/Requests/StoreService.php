@@ -25,6 +25,7 @@ class StoreService extends FormRequest
     {
         return [
             'name' => 'bail|required',
+            'photo' => 'bail|required',
             'address' => 'bail|required',
             'longitude' => 'bail|required',
             'latitude' => 'bail|required',

@@ -95,16 +95,18 @@ class ServiceController extends Controller
         $service->language_code = $request->language_code;
         $service->save();
 
-        foreach ($request->photo as $file) {
-            
-            $request['picture'] = $file->store('public/storage');
-            $request['picture'] = Storage::url($request['picture']);
-            $request['picture'] = asset($request['picture']);
+        if ($request->photo){
+            foreach ($request->photo as $file) {
+                
+                $request['picture'] = $file->store('public/storage');
+                $request['picture'] = Storage::url($request['picture']);
+                $request['picture'] = asset($request['picture']);
 
-            ServicePhoto::create([
-                'service_id' => $service->id,
-                'photo' => $request['picture']
-            ]);
+                ServicePhoto::create([
+                    'service_id' => $service->id,
+                    'photo' => $request['picture']
+                ]);
+            }
         }
         if($service){
             Session::flash('message', 'Service Created Successfully!'); 

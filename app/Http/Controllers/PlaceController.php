@@ -102,17 +102,20 @@ class PlaceController extends Controller
         $place->language_code = $request->language_code;
         $place->save();
 
-        foreach ($request->photo as $file) {
+        if ($request->photo){
+            foreach ($request->photo as $file) {
             
-            $request['picture'] = $file->store('public/storage');
-            $request['picture'] = Storage::url($request['picture']);
-            $request['picture'] = asset($request['picture']);
+                $request['picture'] = $file->store('public/storage');
+                $request['picture'] = Storage::url($request['picture']);
+                $request['picture'] = asset($request['picture']);
 
-            PlacePhoto::create([
-                'place_id' => $place->id,
-                'photo' => $request['picture']
-            ]);
+                PlacePhoto::create([
+                    'place_id' => $place->id,
+                    'photo' => $request['picture']
+                ]);
+            }
         }
+        
 
         if($place){
             Session::flash('message', 'Place Created Successfully!'); 

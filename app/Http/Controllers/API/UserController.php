@@ -126,6 +126,18 @@ public $successStatus = 200;
             )
         );
 
+        $file_path ='';
+    
+            if ($request['image']){
+                $originalImage= $request->file('image');
+                $request['picture'] = $request->file('image')->store('public/storage');
+                $request['picture'] = Storage::url($request['picture']);
+                $request['picture'] = asset($request['picture']);
+                // $filename = $request->file('image')->hashName();
+                $file_path = $request['picture'];
+    
+            }
+
         $user = new User;
 
         $user->name = $request->name;
@@ -144,7 +156,7 @@ public $successStatus = 200;
                 'country'   => $request->country,
                 'country_code'   => $request->country_code,
                 'phone' =>  $request->phone,
-                // 'photo' => $request->photo,
+                'photo' => $file_path,
             ]);
 
         $profile = $user->profile()->save($profile);
@@ -214,14 +226,15 @@ public $successStatus = 200;
                         return response()->json(['error'=>$validator->errors()], 401);            
             }
     
-            $filename ='';
+            $file_path ='';
     
             if ($request['image']){
                 $originalImage= $request->file('image');
                 $request['picture'] = $request->file('image')->store('public/storage');
                 $request['picture'] = Storage::url($request['picture']);
                 $request['picture'] = asset($request['picture']);
-                $filename = $request->file('image')->hashName();
+                // $filename = $request->file('image')->hashName();
+                $file_path = $request['picture'];
     
             }
     
@@ -234,7 +247,7 @@ public $successStatus = 200;
                   ->update([
                     'phone' => $request->phone, 
                     'gender' => $request->gender,
-                    'photo' => $filename,
+                    'photo' => $file_path,
                     'address' => $request->address,
                     'longitude' => $request->longitude,
                     'latitude' => $request->latitude, 

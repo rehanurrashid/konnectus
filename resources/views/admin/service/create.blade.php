@@ -100,7 +100,7 @@
                                                     <div class="form-group">
                                                         {{ Form::label('photo','Service Images') }}
                                                         <span >(Optional)</span>
-                                                        <input type="file" name="photo[]" class="form-control" style="margin-bottom:10px;" value="{{ old('photo') }}" multiple="true">
+                                                        <input type="file" name="photo[]" class="form-control" style="margin-bottom:10px;" value="{{ old('photo') }}" multiple="true" data-validate-field="photo">
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
                                                         <p id="error1" style="display:none; color:#B81111;">
                                                         Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
@@ -251,6 +251,9 @@
             name: {
                 required: true
             },
+            photo: {
+                required: true
+            },
             phone: {
                 required: true
             },
@@ -279,6 +282,9 @@
             },
             name: {
                 required: 'Location name is required',
+            },
+            photo: {
+                required: 'Atleast one valid image is required',
             },
             phone: {
                 required: 'Phone number is required',
