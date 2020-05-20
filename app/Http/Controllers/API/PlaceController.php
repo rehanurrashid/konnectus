@@ -154,9 +154,9 @@ class PlaceController extends Controller
             if(!empty($place)){
 
 
-                foreach ($places as $place) {
-                    $place->language_code = explode(',',$place->language_code);
-                }
+                
+                $place->language_code = explode(',',$place->language_code);
+                
 
                 $place['latest_places'] = Place::orderBy('id', 'desc')->take(5)->get();
 
@@ -187,12 +187,10 @@ class PlaceController extends Controller
                 $rate = number_format((float)$rate, 1, '.', '');
                 $place->avg_rate = $rate;
 
-                return response(['product' => $place], 200);
+                return response(['place' => $place], 200);
             }
             else{
-                // $place['product'] = 'No Product Found!';
-                // $place['latest_places'] = Product::orderBy('id', 'desc')->take(5)->get();
-                return response(['product' => []], 200);
+                return response(['place' => []], 200);
             }
         }
         else if(!empty($request->keyword)){
@@ -205,7 +203,7 @@ class PlaceController extends Controller
                 $q->orWhere('name', 'like', '%'.$value.'%')
                     ->orWhere('tags', 'like', '%'.$value.'%');
               }
-            })->get();
+            })->with(['category','photos'])->get();
 
             $props = ['name'];
 
