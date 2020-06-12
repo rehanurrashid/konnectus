@@ -51,6 +51,7 @@ Route::prefix('admin')->middleware(['auth:web','check.role:admin'])->group(funct
   	Route::get('acount-settings/{id}/edit','AdminController@edit')->name('admin.account.edit');
   	Route::put('acount-settings/{id}','AdminController@update')->name('admin.account.update');
 
+    Route::resource('content_settings', 'ContentSettingController');
   	Route::resource('users', 'UserController');
     Route::resource('posts', 'PostController');
   	Route::resource('categories','CategoryController');

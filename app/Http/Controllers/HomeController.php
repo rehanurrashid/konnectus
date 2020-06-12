@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\ContentSetting;
 use App\User;
 use App\Post;
 
@@ -39,7 +40,7 @@ class HomeController extends Controller
     public function home(Request $request)
     {   
         $posts = Post::latest()->limit(3)->get();
-
+        $content = ContentSetting::first();
         foreach ($posts as $post) {
 
             $created = new Carbon($post->created_at);
@@ -51,7 +52,7 @@ class HomeController extends Controller
 
         }
 
-        return view('user.pages.home', compact('posts'));
+        return view('user.pages.home', compact('posts','content'));
     }
 
     public function single($slug)

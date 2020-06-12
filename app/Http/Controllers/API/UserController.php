@@ -100,6 +100,7 @@ public $successStatus = 200;
             'phone' => 'required|unique:user_profiles', 
             'country' => 'required', 
             'country_code' => 'required', 
+            'address' => 'required',
         ]);
         if ($validator->fails()) { 
                     return response()->json(['error'=>$validator->errors()], 401);            
@@ -151,8 +152,10 @@ public $successStatus = 200;
 
         $profile = new UserProfile([
                 'user_id' => $user->id,
-                // 'address'  => $request->address,
-                // 'city'  => $request->city,
+                'address'  => $request->address,
+                'longitude'  => $request->longitude,
+                'latitude'  => $request->latitude,
+                'city' => $request->city,
                 'country'   => $request->country,
                 'country_code'   => $request->country_code,
                 'phone' =>  $request->phone,
@@ -168,6 +171,10 @@ public $successStatus = 200;
             'name' => $user->name,
             'username' => $user->username,
             'email' => $user->email,
+            'address' => $profile->address,
+            'longitude' => $profile->longitude,
+            'latitude' => $profile->latitude,
+            'city' => $request->city,
             'country' => $profile->country,
             'country_code' => $profile->country_code,
             'phone' => $profile->phone,
@@ -192,29 +199,37 @@ public $successStatus = 200;
 
     public function update(Request $request){
         if(!$request->name){
+
             if ($request['image']){
                 $originalImage= $request->file('image');
                 $request['picture'] = $request->file('image')->store('public/storage');
                 $request['picture'] = Storage::url($request['picture']);
                 $request['picture'] = asset($request['picture']);
-                $filename = $request->file('image')->hashName();
-            }
-            $profile = DB::table('user_profiles')
+                // $filename = $request->file('image')->hashName();
+                $file_path = $request['picture'];
+
+                $profile = DB::table('user_profiles')
                   ->where('user_id', auth()->user()->id)
                   ->update([
-                    'photo' => $filename,
+                    'photo' => $file_path,
                 ]);
     
-            if($profile){
-                return response()->json(['success'=>'User profile updated successfully'], $this->successStatus);
+                if($profile){
+                    return response()->json(['success'=>'User profile updated successfully'], $this->successStatus);
+                }
+                else{
+                    return response()->json(['success'=>'Unable to update user profile'], 401);
+                }
             }
             else{
-                return response()->json(['success'=>'Unable to update user profile'], 401);
+                    return response()->json(['success'=>'Atleat Image is required!'], 401);
             }
+            
         }else{
 
             $validator = Validator::make($request->all(), [ 
                 'name' => 'required', 
+                'email' => 'unique:users,email,'.auth()->user()->id.',id',
                 'phone' => 'required|unique:user_profiles,phone,'.auth()->user()->id.',user_id',
                 'gender' => 'required',
                 'address' => 'required',
@@ -223,11 +238,10 @@ public $successStatus = 200;
                 'dob' => 'required',
             ]);
             if ($validator->fails()) { 
-                        return response()->json(['error'=>$validator->errors()], 401);            
+                return response()->json(['error'=>$validator->errors()], 401);            
             }
-    
-            $file_path ='';
-    
+            
+
             if ($request['image']){
                 $originalImage= $request->file('image');
                 $request['picture'] = $request->file('image')->store('public/storage');
@@ -237,28 +251,34 @@ public $successStatus = 200;
                 $file_path = $request['picture'];
     
             }
-    
+            else{
+                $user = User::where('id', auth()->user()->id)->with('profile')->first();
+                $file_path = $user->profile->photo;
+            }
+
             $user = DB::table('users')
                   ->where('id', auth()->user()->id)
-                  ->update(['name' => $request->name]);
-    
-            $profile = DB::table('user_profiles')
+                  ->update(['name' => $request->name , 'email' => $request->email]);
+
+            if($user){
+
+                $profile = DB::table('user_profiles')
                   ->where('user_id', auth()->user()->id)
                   ->update([
                     'phone' => $request->phone, 
                     'gender' => $request->gender,
                     'photo' => $file_path,
+                    'city' => $request->city,
                     'address' => $request->address,
                     'longitude' => $request->longitude,
                     'latitude' => $request->latitude, 
                     'dob' => $request->dob, 
                 ]);
-    
-            if($profile){
+
                 return response()->json(['success'=>'User profile updated successfully'], $this->successStatus);
             }
             else{
-                return response()->json(['success'=>'Unable to update user profile'], 401);
+                return response()->json(['success'=>'Unable to update user'], 200);
             }
         }
 

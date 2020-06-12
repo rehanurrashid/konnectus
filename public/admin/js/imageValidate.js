@@ -25,10 +25,15 @@
 	             $('#error2').slideUp("slow");
 	             }
 	             $('#error1').slideUp("slow");
+
+                 
+
 	             if (a==1){
 	             $('button:submit').attr('disabled',false);
              }
+
             }
+
         });
 
         //binds to onchange event of your input field
@@ -151,6 +156,44 @@
                  $('#videoerror2').slideUp("slow");
                  }
                  $('#videoerror1').slideUp("slow");
+                 if (a==1){
+                 $('button:submit').attr('disabled',false);
+             }
+            }
+        });
+
+////////////////// Front End Image Validate Code
+
+        //binds to onchange event of your input field
+        $("input.image").change( function(event) {
+
+        if ($('button:submit').attr('disabled',false)){
+             $('button:submit').attr('disabled',true);
+             }
+            var ext = $(this).val().split('.').pop().toLowerCase();
+            if ($.inArray(ext, ['gif','png','jpg','jpeg']) == -1){
+
+                 $(this).next('p.error1').slideDown("slow");
+                 $(this).parents('div.card').css({'border':'1px solid rgb(184, 17, 17)','background-color':'rgb(255, 223, 223)'})
+                 $(this).next('p.error2').slideUp("slow");
+                 a=0;
+
+             }
+             else{
+                
+                 var picsize = (this.files[0].size);
+                 if (picsize > 5000000){
+                 $(this).next('p.error2').slideDown("slow");
+                 $(this).parents('div.card').css({'border':'1px solid rgb(184, 17, 17)','background-color':'rgb(255, 223, 223)'})
+                 a=0;
+                 }else{
+                 a=1;
+                 $(this).next('p.error2').slideUp("slow");
+                 $(this).parents('div.card').css({'border':'1px solid rgba(0,0,0,.125)','background-color':'#fff'})
+                 }
+                 $(this).next('p.error1').slideUp("slow");
+                 $(this).parents('div.card').css({'border':'1px solid rgba(0,0,0,.125)','background-color':'#fff'})
+
                  if (a==1){
                  $('button:submit').attr('disabled',false);
              }

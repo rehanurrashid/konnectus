@@ -39,7 +39,7 @@
         <div class="content-wrapper">
 
             <!-- Page header -->
-                @include('admin.includes.pageheader');
+                @include('admin.includes.pageheader')
             <!-- /page header -->
 
 
@@ -112,7 +112,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        {{ Form::label('photo','User Image') }}<span style="color:red;">*</span>
+                                                        {{ Form::label('photo','Category Image') }}<span style="color:red;">*</span>
                                                         {{ Form::file('photo',array('class'=>'form-control', 'style'=> 'margin-bottom:10px;','placeholder'=>'Select Image', 'data-validate-field' => 'photo')) }}
                                                         {!! $errors->first('photo', '<label id="photo-error" class="error" for="photo">:message</label>') !!}
                                                         <p id="error1" style="display:none; color:#B81111;">

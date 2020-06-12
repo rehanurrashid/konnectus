@@ -30,6 +30,6 @@ class PasswordSentEmail extends Mailable
     public function build()
     {   
         $password = $this->password;
-        return $this->markdown('email.password',compact('password'));
+        return $this->from('admin@konnectus.io')->markdown('email.password',compact('password'));
     }
 }

@@ -7,9 +7,7 @@
 
 <title>@yield('title') | {{ \Config::get('app.name') }}</title>
 
-<link rel="icon" href="favicon.ico" type="image/x-icon" src="{{ asset('images/'.'logo.png') }}" >
-
-<link rel="icon" href="{{ URL::asset('images/'.'logo.png') }}" type="image/x-icon"/>
+<link rel="icon" href="{{asset('images/favicon.png')}}" type="image/gif" sizes="16x16">
 
 @include("admin.includes.styles")
 @include("admin.includes.scripts")

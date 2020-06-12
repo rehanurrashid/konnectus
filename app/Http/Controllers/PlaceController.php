@@ -186,7 +186,7 @@ class PlaceController extends Controller
      */
     public function destroy($id)
     {
-        $place = Place::find($id)->delete();
+        $place = Place::find($id)->forceDelete();
         if($place){
             return view('admin.place.index');
         }

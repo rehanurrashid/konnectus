@@ -39,7 +39,7 @@
         <div class="content-wrapper">
 
             <!-- Page header -->
-                @include('admin.includes.pageheader');
+                @include('admin.includes.pageheader')
             <!-- /page header -->
 
 

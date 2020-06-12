@@ -149,7 +149,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::find($id)->delete();
+        $category = Category::find($id)->forceDelete();
         if($category){
             return view('admin.category.index');
         }

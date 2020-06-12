@@ -166,7 +166,7 @@ class PendingServiceController extends Controller
      */
     public function destroy($id)
     {
-        $service = Service::find($id)->delete();
+        $service = Service::find($id)->forceDelete();
         if($service){
             return view('admin.pending_service.index');
         }

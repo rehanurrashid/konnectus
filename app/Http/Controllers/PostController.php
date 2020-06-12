@@ -162,7 +162,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = Post::find($id)->delete();
+        $post = Post::find($id)->forceDelete();
         if($post){
             return view('admin.post.index');
         }

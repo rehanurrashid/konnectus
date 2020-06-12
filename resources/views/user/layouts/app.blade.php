@@ -21,6 +21,7 @@
 
     <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
+  <link rel="icon" href="{{asset('images/favicon.png')}}" type="image/gif" sizes="16x16">
 </head>
 <body>
     <div id="app">

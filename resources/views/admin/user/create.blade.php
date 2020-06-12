@@ -39,7 +39,7 @@
         <div class="content-wrapper">
 
             <!-- Page header -->
-                @include('admin.includes.pageheader');
+                @include('admin.includes.pageheader')
             <!-- /page header -->
 
 
@@ -157,6 +157,13 @@
                                                         {{ Form::label('address','Address') }}<span style="color:blue;"> &nbsp; (optional)</span>
                                                         <input type="text" name="address" placeholder="Enter Address" data-validate-field="address" style="margin-bottom:10px;" id="address" class="form-control" value="{{old('address')}}">
                                                         {!! $errors->first('address', '<label id="email-error" class="error" for="email">:message</label>') !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col m-auto">
+                                                    <div class="form-group">
+                                
+                                                        <input type="checkbox" name="make_admin" class=""> Make Admin
+                    
                                                     </div>
                                                 </div>
                                             </div>

@@ -176,7 +176,7 @@ class DisapprovedServiceController extends Controller
      */
     public function destroy($id)
     {
-        $service = Service::find($id)->delete();
+        $service = Service::find($id)->forceDelete();
         if($service){
             return view('disapproved_service.index');
         }

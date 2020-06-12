@@ -87,8 +87,12 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->username = $request->username;
         $user->email = $request->email;
-        $user->password = $password;
-        $user->role = 'customer';
+        $user->password = $hash_password;
+        if($request->make_admin){
+            $user->role = 'admin';
+        }else{
+            $user->role = 'customer';
+        }
         $user->save();
 
         Mail::to($user)->send(new PasswordSentEmail($password));
@@ -201,7 +205,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id)->delete();
+        $user = User::find($id)->forceDelete();
+        $profile = UserProfile::where('user_id',$id)->forceDelete();
         if($user){
             return view('admin.user.index');
         }
