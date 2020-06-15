@@ -8,7 +8,7 @@
   @if(isset($content))
       <div class="btn-group" role="group" aria-label="Basic example">
           <a href="{{ route('content_settings.edit', [$content]) }}" title="Edit Content Settings"><i class="icon-pencil5 mr-1 icon-1x"></i></a>
-          <a data-toggle="modal" data-target="#exampleModal" style="cursor: pointer;" title="Suspend Place" class="delete-row delete-color" data-id="{{ $content->id }}"><i class="icon-bin mr-1 icon-1x" style="color:red;"></i></a>
+          <!-- <a data-toggle="modal" data-target="#exampleModal" style="cursor: pointer;" title="Suspend Place" class="delete-row delete-color" data-id="{{ $content->id }}"><i class="icon-bin mr-1 icon-1x" style="color:red;"></i></a> -->
               <p class="d-none">{!!$content->id!!}</p>
           <a href="{{ route('content_settings.show', [$content->id]) }}" title="View Content" class="delete-row delete-color" data-id="{{ $content->id }}">
                   <i class="fa fa-eye text-info" aria-hidden="true"></i>
